@@ -945,65 +945,176 @@ button{cursor:pointer;font-family:var(--fn)}
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 // ============ SUPABASE CONFIG ============
-// ⚠️ ضع هنا بياناتك من Supabase Dashboard > Settings > API
-const SUPABASE_URL = 'https://atpdpnxkanvxdifrehny.supabase.co';
-const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY_HERE';
+// ⚠️ لتفعيل Supabase الحقيقي: ضع بياناتك من Dashboard > Settings > API
+// إذا تركتهم فارغين، سيعمل النظام في وضع Demo المحلي
+const SUPABASE_URL = 'https://atpdpnxkanvxdifrehnyy.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF0cGRweGthbnZ4ZGlmcmVobnl5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc5Mjg3NTYsImV4cCI6MjA5MzUwNDc1Nn0.kV6Edi1YvL5aSQs1qS6PbNmaE4hp6Zx6E2qhR_8-85s';
 
-let _sb = null;
-try {
-  _sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-} catch(e) {
-  console.warn('Supabase not configured yet:', e.message);
+// ============ LOCAL USERS STORE (Demo Mode) ============
+// يُخزَّن في localStorage — يعمل بدون أي server
+const LOCAL_STORE_KEY = 'alsaeed_users';
+function getUsers() {
+  try { return JSON.parse(localStorage.getItem(LOCAL_STORE_KEY) || '{}'); } catch { return {}; }
+}
+function saveUsers(u) {
+  localStorage.setItem(LOCAL_STORE_KEY, JSON.stringify(u));
+}
+function getSession() {
+  try { return JSON.parse(localStorage.getItem('alsaeed_session') || 'null'); } catch { return null; }
+}
+function saveSession(s) {
+  if (s) localStorage.setItem('alsaeed_session', JSON.stringify(s));
+  else localStorage.removeItem('alsaeed_session');
 }
 
-// ============ AUTH FUNCTIONS ============
+// ============ SUPABASE CLIENT ============
+let _sb = null;
+const USE_SUPABASE = SUPABASE_URL && SUPABASE_ANON_KEY && !SUPABASE_ANON_KEY.includes('YOUR');
+if (USE_SUPABASE) {
+  try {
+    _sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    console.log('✅ Supabase connected');
+  } catch(e) {
+    console.warn('⚠️ Supabase error, falling back to local mode:', e.message);
+  }
+} else {
+  console.log('ℹ️ Running in Local Demo Mode (no Supabase configured)');
+}
+
+// ============ AUTH HELPERS ============
 function showMsg(id, msg, type) {
   const el = document.getElementById(id);
   if (!el) return;
   el.textContent = msg;
   el.className = 'auth-msg ' + type;
   el.style.display = 'block';
+  setTimeout(() => { el.style.display = 'none'; }, 5000);
 }
 
+function setLoggedIn(name, email) {
+  const nameEl = document.getElementById('dashName');
+  if (nameEl) nameEl.textContent = name || email?.split('@')[0] || 'مستخدم';
+  saveSession({ name, email, time: Date.now() });
+}
+
+// ============ LOGIN ============
 async function doLogin() {
-  const email = document.getElementById('loginEmail').value.trim();
-  const pass = document.getElementById('loginPass').value;
-  if (!email || !pass) { showMsg('loginMsg','الرجاء إدخال البريد وكلمة المرور','error'); return; }
-  if (!_sb) { go('dashboard'); return; } // demo mode
-  const { data, error } = await _sb.auth.signInWithPassword({ email, password: pass });
-  if (error) {
-    showMsg('loginMsg', 'خطأ: ' + (error.message === 'Invalid login credentials' ? 'بريد أو كلمة مرور غير صحيحة' : error.message), 'error');
-  } else {
-    const name = data.user.user_metadata?.full_name || email.split('@')[0];
-    document.getElementById('dashName').textContent = name;
-    go('dashboard');
+  const emailEl = document.getElementById('loginEmail');
+  const passEl  = document.getElementById('loginPass');
+  if (!emailEl || !passEl) return;
+
+  const email = emailEl.value.trim().toLowerCase();
+  const pass  = passEl.value;
+
+  if (!email) { showMsg('loginMsg','الرجاء إدخال البريد الإلكتروني','error'); return; }
+  if (!pass)  { showMsg('loginMsg','الرجاء إدخال كلمة المرور','error'); return; }
+
+  // --- Supabase Mode ---
+  if (_sb) {
+    showMsg('loginMsg','جاري تسجيل الدخول...','success');
+    const { data, error } = await _sb.auth.signInWithPassword({ email, password: pass });
+    if (error) {
+      const msgs = {
+        'Invalid login credentials': 'البريد الإلكتروني أو كلمة المرور غير صحيحة',
+        'Email not confirmed': 'الرجاء تأكيد بريدك الإلكتروني أولاً',
+        'Too many requests': 'محاولات كثيرة، انتظر قليلاً ثم حاول مجدداً',
+      };
+      showMsg('loginMsg', '❌ ' + (msgs[error.message] || error.message), 'error');
+    } else {
+      const name = data.user.user_metadata?.full_name || email.split('@')[0];
+      setLoggedIn(name, email);
+      showMsg('loginMsg','✅ تم تسجيل الدخول بنجاح!','success');
+      setTimeout(() => go('dashboard'), 700);
+    }
+    return;
   }
+
+  // --- Local Demo Mode ---
+  const users = getUsers();
+  const user = users[email];
+  if (!user) {
+    showMsg('loginMsg','❌ هذا البريد الإلكتروني غير مسجل، قم بإنشاء حساب أولاً','error');
+    return;
+  }
+  if (user.pass !== btoa(pass)) {
+    showMsg('loginMsg','❌ كلمة المرور غير صحيحة','error');
+    return;
+  }
+  setLoggedIn(user.name, email);
+  showMsg('loginMsg','✅ تم تسجيل الدخول بنجاح!','success');
+  setTimeout(() => go('dashboard'), 700);
 }
 
+// ============ REGISTER ============
 async function doRegister() {
-  const email = document.getElementById('regEmail').value.trim();
-  const pass = document.getElementById('regPass').value;
-  const first = document.getElementById('regFirst').value.trim();
-  const last = document.getElementById('regLast').value.trim();
-  if (!email || !pass || !first) { showMsg('regMsg','الرجاء إدخال جميع البيانات المطلوبة','error'); return; }
+  const firstEl = document.getElementById('regFirst');
+  const lastEl  = document.getElementById('regLast');
+  const emailEl = document.getElementById('regEmail');
+  const passEl  = document.getElementById('regPass');
+  if (!firstEl || !emailEl || !passEl) return;
+
+  const first = firstEl.value.trim();
+  const last  = lastEl ? lastEl.value.trim() : '';
+  const email = emailEl.value.trim().toLowerCase();
+  const pass  = passEl.value;
+  const name  = (first + ' ' + last).trim();
+
+  if (!first)          { showMsg('regMsg','الرجاء إدخال الاسم الأول','error'); return; }
+  if (!email)          { showMsg('regMsg','الرجاء إدخال البريد الإلكتروني','error'); return; }
+  if (!/\S+@\S+\.\S+/.test(email)) { showMsg('regMsg','صيغة البريد الإلكتروني غير صحيحة','error'); return; }
+  if (!pass)           { showMsg('regMsg','الرجاء إدخال كلمة المرور','error'); return; }
   if (pass.length < 8) { showMsg('regMsg','كلمة المرور يجب أن تكون 8 أحرف على الأقل','error'); return; }
-  if (!_sb) { go('dashboard'); return; } // demo mode
-  const { data, error } = await _sb.auth.signUp({
-    email,
-    password: pass,
-    options: { data: { full_name: first + ' ' + last } }
-  });
-  if (error) {
-    showMsg('regMsg', 'خطأ: ' + error.message, 'error');
-  } else {
-    showMsg('regMsg', '✅ تم إنشاء الحساب! راجع بريدك الإلكتروني للتأكيد.', 'success');
-    setTimeout(() => go('login'), 2000);
+
+  // --- Supabase Mode ---
+  if (_sb) {
+    showMsg('regMsg','جاري إنشاء الحساب...','success');
+    const { data, error } = await _sb.auth.signUp({
+      email,
+      password: pass,
+      options: { data: { full_name: name } }
+    });
+    if (error) {
+      const msgs = {
+        'User already registered': 'هذا البريد الإلكتروني مسجل مسبقاً',
+        'Password should be at least 6 characters': 'كلمة المرور قصيرة جداً',
+        'Unable to validate email address: invalid format': 'صيغة البريد الإلكتروني غير صحيحة',
+      };
+      showMsg('regMsg', '❌ ' + (msgs[error.message] || error.message), 'error');
+    } else {
+      showMsg('regMsg','✅ تم إنشاء الحساب! راجع بريدك الإلكتروني للتأكيد ثم سجّل دخولك.','success');
+      firstEl.value = ''; lastEl && (lastEl.value = '');
+      emailEl.value = ''; passEl.value = '';
+      setTimeout(() => go('login'), 2500);
+    }
+    return;
   }
+
+  // --- Local Demo Mode ---
+  const users = getUsers();
+  if (users[email]) {
+    showMsg('regMsg','❌ هذا البريد الإلكتروني مسجل مسبقاً، سجّل دخولك مباشرة','error');
+    return;
+  }
+  users[email] = { name, pass: btoa(pass), email, created: Date.now() };
+  saveUsers(users);
+  setLoggedIn(name, email);
+  showMsg('regMsg','✅ تم إنشاء الحساب بنجاح! جاري توجيهك...','success');
+  setTimeout(() => go('dashboard'), 1000);
 }
 
+// ============ LOGOUT ============
 async function doLogout() {
   if (_sb) await _sb.auth.signOut();
+  saveSession(null);
   go('home');
+}
+
+// ============ AUTO-LOGIN on load ============
+function checkSession() {
+  const s = getSession();
+  if (s && s.email) {
+    setLoggedIn(s.name, s.email);
+  }
 }
 
 // ============ DATA ============
@@ -1335,6 +1446,7 @@ function toggleLang(v){document.documentElement.setAttribute('lang',v);document.
 
 // ============ INIT ============
 window.addEventListener('load',()=>{
+  checkSession();
   setTimeout(()=>{
     const l=document.getElementById('ld');
     l.classList.add('hide');
@@ -1343,6 +1455,13 @@ window.addEventListener('load',()=>{
   renderCourses(courses.slice(0,6),'homeCourses');
   renderEdu('ابتدائي');
   document.getElementById('mo').addEventListener('click',function(e){if(e.target===this)closeMo();});
+  document.addEventListener('keydown',function(e){
+    if(e.key!=='Enter')return;
+    const lp=document.getElementById('page-login');
+    const rp=document.getElementById('page-register');
+    if(lp&&lp.classList.contains('active'))doLogin();
+    if(rp&&rp.classList.contains('active'))doRegister();
+  });
 });
 </script>
 </body>
