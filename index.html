@@ -343,11 +343,17 @@ button{cursor:pointer;font-family:var(--fn)}
 .tbtn{flex:1;padding:8px 11px;border:none;background:none;border-radius:7px;font-size:12.5px;font-weight:500;color:var(--g600);font-family:var(--fn);transition:all .2s;cursor:pointer}
 .tbtn.active{background:#fff;color:var(--navy);font-weight:700;box-shadow:var(--s1)}
 
+/* AUTH ERROR/SUCCESS MESSAGES */
+.auth-msg{padding:10px 14px;border-radius:9px;font-size:13px;margin-bottom:13px;display:none}
+.auth-msg.success{background:rgba(11,110,79,.1);color:var(--green);border:1px solid rgba(11,110,79,.2)}
+.auth-msg.error{background:rgba(200,0,0,.07);color:#c00;border:1px solid rgba(200,0,0,.15)}
+
 @media(max-width:900px){.hi{grid-template-columns:1fr}.elv{grid-template-columns:1fr}.ftg{grid-template-columns:1fr 1fr}.dss{grid-template-columns:1fr 1fr}.dl{flex-direction:column}.sb-side{width:100%;min-height:auto}.mg2,.mg3{grid-template-columns:1fr}}
 @media(max-width:600px){.nl{display:none}.hero h1{font-size:26px}.stl{font-size:22px}.hst{grid-template-columns:1fr 1fr}.dss{grid-template-columns:1fr 1fr}}
 </style>
 </head>
 <body>
+
 <!-- LOADING -->
 <div class="ld" id="ld">
   <img src="http://alsaeed-etc.com/main/images/logo/logo3.png" alt="Al Saeed" style="height:60px;filter:brightness(0) invert(1);margin-bottom:14px">
@@ -383,10 +389,10 @@ button{cursor:pointer;font-family:var(--fn)}
       </div>
       <div class="ms"><label>بياناتك</label>
         <div class="mg2" style="gap:9px;margin-bottom:9px">
-          <div><div class="fl">الاسم الكامل</div><input type="text" class="fi2" placeholder="محمد السعيد"></div>
-          <div><div class="fl">البريد الإلكتروني</div><input type="email" class="fi2" placeholder="email@example.com" dir="ltr"></div>
+          <div><div class="fl">الاسم الكامل</div><input type="text" class="fi2" placeholder="محمد السعيد" id="mo_name"></div>
+          <div><div class="fl">البريد الإلكتروني</div><input type="email" class="fi2" placeholder="email@example.com" dir="ltr" id="mo_email"></div>
         </div>
-        <div><div class="fl">رقم الجوال</div><input type="tel" class="fi2" placeholder="+20 / +966 ..." dir="ltr"></div>
+        <div><div class="fl">رقم الجوال</div><input type="tel" class="fi2" placeholder="+20 / +966 ..." dir="ltr" id="mo_phone"></div>
       </div>
       <div class="ms"><label>طريقة الدفع</label>
         <div class="mg2">
@@ -557,7 +563,6 @@ button{cursor:pointer;font-family:var(--fn)}
         <h2 class="stl">المراحل الدراسية</h2>
         <p class="sd">اختر مرحلتك ثم التخصص لعرض المقررات المتاحة</p>
       </div>
-      <!-- Level Cards -->
       <div class="elv">
         <div class="elc sch active" onclick="selLvl('school',this)">
           <div class="elh sch"><span class="eli">🏫</span><div class="elt">المرحلة المدرسية</div><div class="els">الابتدائي • الإعدادي • الثانوي</div></div>
@@ -596,7 +601,6 @@ button{cursor:pointer;font-family:var(--fn)}
           </ul></div>
         </div>
       </div>
-      <!-- Sub Content -->
       <div>
         <div class="sh" style="margin-bottom:20px">
           <div class="st" id="esTag" style="background:rgba(41,128,185,.1);color:#2980b9;border-color:rgba(41,128,185,.2)">المرحلة الابتدائية</div>
@@ -618,7 +622,6 @@ button{cursor:pointer;font-family:var(--fn)}
         <button class="pt" onclick="swPkg('education',this)">📚 التعليم الأكاديمي</button>
         <button class="pt" onclick="swPkg('corporate',this)">🏢 المؤسسات</button>
       </div>
-      <!-- Training Packages -->
       <div id="pkg-training"><div class="pgrid">
         <div class="pcard">
           <div class="pn">🎯 الباقة الأساسية</div><div class="pd">مثالية للمبتدئين الراغبين في التحضير لشهادة واحدة</div>
@@ -665,7 +668,6 @@ button{cursor:pointer;font-family:var(--fn)}
           <button class="bpkg" onclick="openMo('الباقة البلاتينية — تدريب مهني','platinum')">اشترك الآن</button>
         </div>
       </div></div>
-      <!-- Education Packages -->
       <div id="pkg-education" style="display:none"><div class="pgrid">
         <div class="pcard">
           <div class="pn">🏫 طالب مدرسي</div><div class="pd">للطلاب من الصف الأول حتى الثانوية العامة</div>
@@ -695,13 +697,11 @@ button{cursor:pointer;font-family:var(--fn)}
           <button class="bpkg" onclick="openMo('باقة الباحث الأكاديمي','platinum')">اشترك الآن</button>
         </div>
       </div></div>
-      <!-- Corporate -->
       <div id="pkg-corporate" style="display:none"><div class="pgrid">
         <div class="pcard"><div class="pn">🏢 الشركات الصغيرة</div><div class="pd">حتى 20 موظف</div><div class="pp" style="font-size:24px"><sup>$</sup>199<span> / شهر</span></div><div class="ppo">السعر الأصلي $500</div><ul class="pfl"><li>20 حساب موظف</li><li>جميع الدورات المهنية</li><li>لوحة متابعة الشركة</li><li>تقارير شهرية</li><li class="no">برنامج مخصص</li></ul><button class="bpkg" onclick="openMo('باقة الشركات الصغيرة','basic')">اشترك الآن</button></div>
         <div class="pcard pop"><div class="pn">🏭 الشركات المتوسطة</div><div class="pd">من 20 حتى 100 موظف</div><div class="pp" style="font-size:24px"><sup>$</sup>499<span> / شهر</span></div><div class="ppo">السعر الأصلي $1,200</div><ul class="pfl"><li>100 حساب موظف</li><li>جميع الدورات + التعليم</li><li>برنامج تدريبي مخصص</li><li>تقارير وتحليلات متقدمة</li><li>جلسات تدريب مباشر شهرية</li><li>استشارة مؤسسية ربع سنوية</li></ul><button class="bpkg gd" onclick="openMo('باقة الشركات المتوسطة','gold')">اشترك الآن</button></div>
         <div class="pcard"><div class="pn">🏗️ المؤسسات الكبرى</div><div class="pd">حكومة، بنوك، +100 موظف</div><div class="pp" style="font-size:20px">تواصل معنا</div><ul class="pfl"><li>عدد غير محدود</li><li>منصة بالهوية المؤسسية</li><li>برامج مخصصة بالكامل</li><li>تكامل مع أنظمة HR</li><li>استشارات مؤسسية</li><li>SLA وضمان الجودة</li></ul><button class="bpkg" onclick="go('consulting')">احجز اجتماع</button></div>
       </div></div>
-      <!-- Guarantee -->
       <div style="max-width:660px;margin:32px auto 0;background:#fff;border-radius:var(--rl);padding:26px;border:1px solid var(--g200);text-align:center;box-shadow:var(--s1)">
         <div style="font-size:34px;margin-bottom:9px">🛡️</div>
         <h3 style="font-size:17px;font-weight:800;color:var(--navy);margin-bottom:7px">ضمان استرداد المبلغ خلال 7 أيام</h3>
@@ -728,7 +728,6 @@ button{cursor:pointer;font-family:var(--fn)}
         <div class="ccard"><div class="cicon">👥</div><div class="ct2">تطوير الكفاءات</div><div class="cd">استراتيجيات شاملة لتطوير رأس المال البشري</div></div>
         <div class="ccard"><div class="cicon">📋</div><div class="ct2">التدريب المؤسسي المخصص</div><div class="cd">برامج تدريبية مصمّمة خصيصاً لاحتياجات مؤسستك</div></div>
       </div>
-      <!-- Booking Form -->
       <div style="background:#fff;border-radius:var(--rl);padding:34px;max-width:660px;margin:0 auto;box-shadow:var(--s2)">
         <h3 style="font-size:19px;font-weight:800;color:var(--navy);margin-bottom:22px;text-align:center">📅 احجز استشارتك الآن</h3>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-bottom:13px">
@@ -742,7 +741,6 @@ button{cursor:pointer;font-family:var(--fn)}
         <div style="margin-bottom:20px"><div class="fl">الموعد المفضل</div><input type="datetime-local" class="fi2" dir="ltr"></div>
         <button class="bsm" onclick="alert('✅ تم إرسال طلب الاستشارة! سيتواصل معك الفريق خلال 24 ساعة.')">إرسال طلب الاستشارة 📤</button>
       </div>
-      <!-- Online Interactives -->
       <div style="margin-top:44px">
         <div class="sh" style="margin-bottom:18px"><div class="st">جلسات مباشرة</div><h2 class="stl" style="font-size:22px">Online Interactives</h2></div>
         <div class="g2">
@@ -775,10 +773,11 @@ button{cursor:pointer;font-family:var(--fn)}
 <div class="page" id="page-login">
   <div class="aw"><div class="ac">
     <div class="al"><img src="http://alsaeed-etc.com/main/images/logo/logo3.png" alt="" style="height:46px;margin-bottom:9px"><h2>مرحباً بعودتك</h2><p>سجّل دخولك للوصول لمحتواك</p></div>
-    <div class="fg"><label class="fl">البريد الإلكتروني</label><input type="email" class="fi2" placeholder="example@email.com" dir="ltr"></div>
-    <div class="fg"><label class="fl">كلمة المرور</label><input type="password" class="fi2" placeholder="••••••••" dir="ltr"></div>
+    <div id="loginMsg" class="auth-msg"></div>
+    <div class="fg"><label class="fl">البريد الإلكتروني</label><input type="email" class="fi2" id="loginEmail" placeholder="example@email.com" dir="ltr"></div>
+    <div class="fg"><label class="fl">كلمة المرور</label><input type="password" class="fi2" id="loginPass" placeholder="••••••••" dir="ltr"></div>
     <div style="text-align:left;margin-bottom:14px"><span style="color:var(--green-light);font-size:12.5px;cursor:pointer;font-weight:600">نسيت كلمة المرور؟</span></div>
-    <button class="bsm" onclick="go('dashboard')">تسجيل الدخول</button>
+    <button class="bsm" onclick="doLogin()">تسجيل الدخول</button>
     <div class="aswitch">ليس لديك حساب؟ <span onclick="go('register')">سجّل الآن</span></div>
   </div></div>
 </div>
@@ -787,6 +786,7 @@ button{cursor:pointer;font-family:var(--fn)}
 <div class="page" id="page-register">
   <div class="aw"><div class="ac">
     <div class="al"><img src="http://alsaeed-etc.com/main/images/logo/logo3.png" alt="" style="height:46px;margin-bottom:9px"><h2>إنشاء حساب جديد</h2><p>انضم لمجتمع السعيد التعليمي</p></div>
+    <div id="regMsg" class="auth-msg"></div>
     <div class="fg"><label class="fl">نوع الحساب</label>
       <div class="rg">
         <div class="rb sel" onclick="selR(this)"><span class="ri">👨‍🎓</span><span class="rl">متدرب مهني</span></div>
@@ -796,13 +796,13 @@ button{cursor:pointer;font-family:var(--fn)}
       </div>
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:11px">
-      <div><label class="fl">الاسم الأول</label><input type="text" class="fi2" placeholder="محمد"></div>
-      <div><label class="fl">اسم العائلة</label><input type="text" class="fi2" placeholder="السعيد"></div>
+      <div><label class="fl">الاسم الأول</label><input type="text" class="fi2" id="regFirst" placeholder="محمد"></div>
+      <div><label class="fl">اسم العائلة</label><input type="text" class="fi2" id="regLast" placeholder="السعيد"></div>
     </div>
-    <div class="fg"><label class="fl">البريد الإلكتروني</label><input type="email" class="fi2" placeholder="example@email.com" dir="ltr"></div>
+    <div class="fg"><label class="fl">البريد الإلكتروني</label><input type="email" class="fi2" id="regEmail" placeholder="example@email.com" dir="ltr"></div>
     <div class="fg"><label class="fl">رقم الجوال</label><input type="tel" class="fi2" placeholder="+20 / +966 ..." dir="ltr"></div>
-    <div class="fg"><label class="fl">كلمة المرور</label><input type="password" class="fi2" placeholder="8 أحرف على الأقل" dir="ltr"></div>
-    <button class="bsm" onclick="go('dashboard')">إنشاء الحساب</button>
+    <div class="fg"><label class="fl">كلمة المرور</label><input type="password" class="fi2" id="regPass" placeholder="8 أحرف على الأقل" dir="ltr"></div>
+    <button class="bsm" onclick="doRegister()">إنشاء الحساب</button>
     <div class="aswitch">لديك حساب؟ <span onclick="go('login')">سجّل الدخول</span></div>
   </div></div>
 </div>
@@ -811,7 +811,7 @@ button{cursor:pointer;font-family:var(--fn)}
 <div class="page" id="page-dashboard">
   <div class="dl">
     <aside class="sb-side">
-      <div class="sp"><div class="sav">م</div><div class="sn">محمد السعيد</div><div class="sr">متدرب مميز ⭐</div></div>
+      <div class="sp"><div class="sav">م</div><div class="sn" id="dashName">محمد السعيد</div><div class="sr">متدرب مميز ⭐</div></div>
       <div class="ssl">القائمة</div>
       <button class="sl active" onclick="swDash('ov',this)"><span class="si3">🏠</span>نظرة عامة</button>
       <button class="sl" onclick="swDash('mc',this)"><span class="si3">📚</span>دوراتي</button>
@@ -821,11 +821,11 @@ button{cursor:pointer;font-family:var(--fn)}
       <div class="ssl">الحساب</div>
       <button class="sl" onclick="go('packages')"><span class="si3">💎</span>ترقية الباقة</button>
       <button class="sl" onclick="go('admin')"><span class="si3">⚙️</span>لوحة الإدارة</button>
-      <button class="sl" onclick="go('home')"><span class="si3">🚪</span>تسجيل خروج</button>
+      <button class="sl" onclick="doLogout()"><span class="si3">🚪</span>تسجيل خروج</button>
     </aside>
     <main class="dm">
       <div id="d-ov">
-        <div class="dg"><h2>مرحباً، محمد! 👋</h2><p>استمر في رحلة التعلم — أنت في المسار الصحيح</p></div>
+        <div class="dg"><h2>مرحباً! 👋</h2><p>استمر في رحلة التعلم — أنت في المسار الصحيح</p></div>
         <div class="dss">
           <div class="dsc"><div class="dsl">الدورات النشطة</div><div class="dsv">4</div><div class="dsc2">↗ +1 هذا الشهر</div></div>
           <div class="dsc"><div class="dsl">الشهادات</div><div class="dsv">2</div><div class="dsc2">↗ +1 مؤخراً</div></div>
@@ -851,7 +851,7 @@ button{cursor:pointer;font-family:var(--fn)}
           <div class="certh"><div class="co">Alsaeed Education, Training & Consulting</div><h2>Al Saeed ETC Platform</h2><div style="color:var(--gold-light);font-size:12px;margin-top:4px">شهادة إتمام — Certificate of Completion</div></div>
           <div class="certb">
             <div style="font-size:12px;color:var(--g400);margin-bottom:5px">يُشهد بأن</div>
-            <div class="cnm">محمد أحمد السعيد</div>
+            <div class="cnm" id="certName">محمد أحمد السعيد</div>
             <div style="font-size:13.5px;color:var(--g600);margin-bottom:5px">قد أتمّ بنجاح برنامج</div>
             <div style="font-size:18px;font-weight:800;color:var(--navy);margin-bottom:6px">Risk Management Professional (PMI-RMP)®</div>
             <div style="font-size:12.5px;color:var(--green);font-weight:600;margin-bottom:22px">24 ساعة تدريبية مكثفة — معتمدة من PMI</div>
@@ -940,7 +940,72 @@ button{cursor:pointer;font-family:var(--fn)}
     </main>
   </div>
 </div>
+
+<!-- ========== SCRIPTS ========== -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+// ============ SUPABASE CONFIG ============
+// ⚠️ ضع هنا بياناتك من Supabase Dashboard > Settings > API
+const SUPABASE_URL = 'https://atpdpnxkanvxdifrehny.supabase.co';
+const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY_HERE';
+
+let _sb = null;
+try {
+  _sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+} catch(e) {
+  console.warn('Supabase not configured yet:', e.message);
+}
+
+// ============ AUTH FUNCTIONS ============
+function showMsg(id, msg, type) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.textContent = msg;
+  el.className = 'auth-msg ' + type;
+  el.style.display = 'block';
+}
+
+async function doLogin() {
+  const email = document.getElementById('loginEmail').value.trim();
+  const pass = document.getElementById('loginPass').value;
+  if (!email || !pass) { showMsg('loginMsg','الرجاء إدخال البريد وكلمة المرور','error'); return; }
+  if (!_sb) { go('dashboard'); return; } // demo mode
+  const { data, error } = await _sb.auth.signInWithPassword({ email, password: pass });
+  if (error) {
+    showMsg('loginMsg', 'خطأ: ' + (error.message === 'Invalid login credentials' ? 'بريد أو كلمة مرور غير صحيحة' : error.message), 'error');
+  } else {
+    const name = data.user.user_metadata?.full_name || email.split('@')[0];
+    document.getElementById('dashName').textContent = name;
+    go('dashboard');
+  }
+}
+
+async function doRegister() {
+  const email = document.getElementById('regEmail').value.trim();
+  const pass = document.getElementById('regPass').value;
+  const first = document.getElementById('regFirst').value.trim();
+  const last = document.getElementById('regLast').value.trim();
+  if (!email || !pass || !first) { showMsg('regMsg','الرجاء إدخال جميع البيانات المطلوبة','error'); return; }
+  if (pass.length < 8) { showMsg('regMsg','كلمة المرور يجب أن تكون 8 أحرف على الأقل','error'); return; }
+  if (!_sb) { go('dashboard'); return; } // demo mode
+  const { data, error } = await _sb.auth.signUp({
+    email,
+    password: pass,
+    options: { data: { full_name: first + ' ' + last } }
+  });
+  if (error) {
+    showMsg('regMsg', 'خطأ: ' + error.message, 'error');
+  } else {
+    showMsg('regMsg', '✅ تم إنشاء الحساب! راجع بريدك الإلكتروني للتأكيد.', 'success');
+    setTimeout(() => go('login'), 2000);
+  }
+}
+
+async function doLogout() {
+  if (_sb) await _sb.auth.signOut();
+  go('home');
+}
+
 // ============ DATA ============
 const courses=[
   {id:1,img:'http://alsaeed-etc.com/storage/package/imgs/112def807faef81f2bfe82c1141ef5bd.jpeg',e:'📋',t:'PMP® Edition 7 - 2026 Golden Package',ar:'الباقة الذهبية PMP® 2026',cat:'PMI',key:'pmi',p:'99.5',old:'199',dis:'50',dur:'114 فيديو',qz:'10 محاكاة',url:'http://alsaeed-etc.com/PackageDetails/2'},
@@ -1088,7 +1153,6 @@ function confirmSub(){
   alert('✅ تم تسجيل طلب اشتراكك بنجاح!\n\nسيتم توجيهك لبوابة الدفع (Paymob / Stripe) لإتمام العملية.\nبعد الدفع يُفتح المحتوى فوراً.\n\n📧 ستصلك رسالة تأكيد على بريدك الإلكتروني.');
 }
 
-// Packages page tabs
 function swPkg(tab,btn){
   document.querySelectorAll('.pt').forEach(b=>b.classList.remove('active'));btn.classList.add('active');
   ['training','education','corporate'].forEach(t=>{const el=document.getElementById('pkg-'+t);if(el)el.style.display=t===tab?'block':'none';});
@@ -1282,47 +1346,4 @@ window.addEventListener('load',()=>{
 });
 </script>
 </body>
-  <!-- Supabase Login Integration -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<script>
-const supabaseUrl = https://atpdpnxkanvxdifrehnyy.supabase.co;
-const supabaseKey = sb_publishable_BtSIz-eI8QHPw4n9O4K5gg_hHEmvtVU;
-
-const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
-
-async function registerUser(email, password) {
-  const { data, error } = await supabaseClient.auth.signUp({
-    email: email,
-    password: password
-  });
-
-  if (error) {
-    alert(error.message);
-  } else {
-    alert("تم إنشاء الحساب بنجاح. راجع بريدك الإلكتروني للتأكيد.");
-  }
-}
-
-async function loginUser(email, password) {
-  const { data, error } = await supabaseClient.auth.signInWithPassword({
-    email: email,
-    password: password
-  });
-
-  if (error) {
-    alert(error.message);
-  } else {
-    alert("تم تسجيل الدخول بنجاح");
-  }
-}
-
-async function logoutUser() {
-  await supabaseClient.auth.signOut();
-  alert("تم تسجيل الخروج");
-}
-</script>
-
-</body>
-</html>
 </html>
