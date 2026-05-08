@@ -1,0 +1,36 @@
+{
+  "name": "alsaeed-platform",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Al Saeed Education, Training & Consultancy Platform - Enterprise AI-powered SaaS",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspaces --if-present",
+    "dev:web": "npm run dev --workspace=@alsaeed/web",
+    "dev:api": "npm run dev --workspace=@alsaeed/api",
+    "build": "npm run build --workspaces --if-present",
+    "build:web": "npm run build --workspace=@alsaeed/web",
+    "build:api": "npm run build --workspace=@alsaeed/api",
+    "lint": "npm run lint --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "db:generate": "npm run generate --workspace=@alsaeed/database",
+    "db:push": "npm run push --workspace=@alsaeed/database",
+    "db:migrate": "npm run migrate --workspace=@alsaeed/database",
+    "db:studio": "npm run studio --workspace=@alsaeed/database",
+    "db:seed": "npm run seed --workspace=@alsaeed/database",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
+    "clean": "rm -rf node_modules apps/*/node_modules packages/*/node_modules apps/*/.next apps/*/dist"
+  },
+  "devDependencies": {
+    "prettier": "^3.3.3",
+    "typescript": "^5.5.4"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=10.0.0"
+  }
+}
