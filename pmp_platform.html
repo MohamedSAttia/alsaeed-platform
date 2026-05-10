@@ -1,0 +1,1208 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PMP Elite Training Platform — د. محمد عطية</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold: #C9A84C;
+  --gold-light: #E8C96D;
+  --gold-dim: #7A6030;
+  --navy: #0A1628;
+  --navy-mid: #112240;
+  --navy-light: #1C3461;
+  --navy-border: #1E3A5F;
+  --teal: #00C9A7;
+  --teal-dim: #007A67;
+  --red: #FF4757;
+  --green: #2ED573;
+  --amber: #FFA502;
+  --text: #E8EDF5;
+  --text-muted: #8899B4;
+  --text-dim: #4A6080;
+  --bg: #070E1A;
+  --card: #0D1B30;
+  --card-border: rgba(201,168,76,0.15);
+  --radius: 12px;
+  --radius-lg: 18px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Cairo', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; }
+
+/* ─── SCROLLBAR ─── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--navy); }
+::-webkit-scrollbar-thumb { background: var(--gold-dim); border-radius: 3px; }
+
+/* ─── SECTIONS ─── */
+.screen { display: none; min-height: 100vh; }
+.screen.active { display: flex; flex-direction: column; }
+
+/* ─── HEADER ─── */
+.top-bar {
+  background: linear-gradient(90deg, var(--navy) 0%, var(--navy-mid) 100%);
+  border-bottom: 1px solid var(--card-border);
+  padding: 14px 28px;
+  display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; z-index: 100;
+}
+.logo { display: flex; align-items: center; gap: 12px; }
+.logo-icon { width: 38px; height: 38px; background: var(--gold); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 900; color: var(--navy); }
+.logo-text { font-size: 15px; font-weight: 700; color: var(--text); }
+.logo-sub { font-size: 11px; color: var(--gold); font-weight: 400; }
+.nav-tabs { display: flex; gap: 6px; }
+.nav-tab { padding: 7px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; border: 1px solid transparent; transition: all 0.2s; color: var(--text-muted); background: transparent; font-family: 'Cairo', sans-serif; }
+.nav-tab:hover { color: var(--text); border-color: var(--navy-border); background: var(--navy-light); }
+.nav-tab.active { background: var(--gold); color: var(--navy); border-color: var(--gold); }
+.user-badge { display: flex; align-items: center; gap: 8px; padding: 6px 14px; background: var(--navy-light); border-radius: 20px; border: 1px solid var(--card-border); font-size: 13px; color: var(--gold); cursor: pointer; }
+
+/* ─── REGISTRATION SCREEN ─── */
+.reg-wrap { flex: 1; display: flex; align-items: center; justify-content: center; padding: 40px 20px; background: radial-gradient(ellipse at 50% 0%, rgba(201,168,76,0.08) 0%, transparent 70%); }
+.reg-card { background: var(--card); border: 1px solid var(--card-border); border-radius: var(--radius-lg); padding: 48px; width: 100%; max-width: 680px; position: relative; overflow: hidden; }
+.reg-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, transparent, var(--gold), transparent); }
+.reg-title { font-size: 26px; font-weight: 900; color: var(--gold); margin-bottom: 6px; text-align: center; }
+.reg-sub { font-size: 14px; color: var(--text-muted); text-align: center; margin-bottom: 36px; }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.form-group { display: flex; flex-direction: column; gap: 7px; }
+.form-group.full { grid-column: 1 / -1; }
+label { font-size: 13px; font-weight: 600; color: var(--text-muted); }
+input, select, textarea {
+  background: var(--navy-mid); border: 1px solid var(--navy-border); border-radius: 8px;
+  padding: 10px 14px; font-family: 'Cairo', sans-serif; font-size: 14px; color: var(--text);
+  transition: border-color 0.2s; outline: none; width: 100%;
+}
+input:focus, select:focus, textarea:focus { border-color: var(--gold); }
+select option { background: var(--navy-mid); }
+textarea { resize: vertical; min-height: 70px; }
+.btn-primary {
+  background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
+  color: var(--navy); border: none; border-radius: 10px; padding: 14px 32px;
+  font-family: 'Cairo', sans-serif; font-size: 16px; font-weight: 700;
+  cursor: pointer; width: 100%; margin-top: 10px; transition: opacity 0.2s, transform 0.1s;
+}
+.btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+.btn-primary:active { transform: scale(0.98); }
+
+/* ─── DASHBOARD ─── */
+.dash-wrap { flex: 1; padding: 28px; display: flex; flex-direction: column; gap: 24px; }
+.welcome-bar { display: flex; align-items: center; gap: 16px; }
+.avatar { width: 52px; height: 52px; border-radius: 50%; background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dim) 100%); display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 700; color: var(--navy); flex-shrink: 0; }
+.welcome-info h2 { font-size: 20px; font-weight: 700; }
+.welcome-info p { font-size: 13px; color: var(--text-muted); }
+.stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+.stat-card { background: var(--card); border: 1px solid var(--card-border); border-radius: var(--radius); padding: 18px 20px; }
+.stat-label { font-size: 12px; color: var(--text-muted); margin-bottom: 8px; }
+.stat-val { font-size: 26px; font-weight: 700; color: var(--gold); }
+.stat-sub { font-size: 11px; color: var(--text-dim); margin-top: 4px; }
+.dash-grid { display: grid; grid-template-columns: 1.6fr 1fr; gap: 20px; }
+.section-card { background: var(--card); border: 1px solid var(--card-border); border-radius: var(--radius-lg); overflow: hidden; }
+.section-head { padding: 18px 22px; border-bottom: 1px solid var(--card-border); display: flex; align-items: center; justify-content: space-between; }
+.section-head h3 { font-size: 15px; font-weight: 700; }
+.section-body { padding: 18px 22px; }
+
+/* CHECKLIST */
+.checklist-item { display: flex; align-items: flex-start; gap: 12px; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+.checklist-item:last-child { border-bottom: none; }
+.chk-box { width: 22px; height: 22px; border: 2px solid var(--navy-border); border-radius: 5px; cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: all 0.2s; margin-top: 2px; }
+.chk-box.done { background: var(--green); border-color: var(--green); }
+.chk-box.done::after { content: '✓'; font-size: 13px; color: var(--navy); font-weight: 700; }
+.chk-info { flex: 1; }
+.chk-title { font-size: 14px; font-weight: 600; color: var(--text); }
+.chk-meta { font-size: 12px; color: var(--text-muted); margin-top: 3px; }
+.chk-tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 700; margin-top: 4px; }
+.tag-people { background: rgba(0,201,167,0.12); color: var(--teal); }
+.tag-process { background: rgba(201,168,76,0.12); color: var(--gold); }
+.tag-biz { background: rgba(255,71,87,0.12); color: var(--red); }
+.tag-agile { background: rgba(46,213,115,0.12); color: var(--green); }
+
+/* PROGRESS */
+.prog-wrap { margin: 8px 0; }
+.prog-label { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-muted); margin-bottom: 6px; }
+.prog-bar { height: 7px; background: var(--navy-mid); border-radius: 10px; overflow: hidden; }
+.prog-fill { height: 100%; border-radius: 10px; background: linear-gradient(90deg, var(--gold-dim), var(--gold)); transition: width 0.6s ease; }
+.prog-fill.green { background: linear-gradient(90deg, #1a8a4a, var(--green)); }
+.prog-fill.teal { background: linear-gradient(90deg, var(--teal-dim), var(--teal)); }
+
+/* QUICK ACTIONS */
+.action-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.action-btn { background: var(--navy-mid); border: 1px solid var(--navy-border); border-radius: 10px; padding: 14px; cursor: pointer; text-align: center; transition: all 0.2s; font-family: 'Cairo', sans-serif; color: var(--text); }
+.action-btn:hover { border-color: var(--gold); background: rgba(201,168,76,0.07); }
+.action-btn .ab-icon { font-size: 22px; margin-bottom: 6px; }
+.action-btn .ab-label { font-size: 13px; font-weight: 600; }
+
+/* ─── EXAM SCREEN ─── */
+.exam-wrap { flex: 1; display: grid; grid-template-columns: 1fr 340px; height: calc(100vh - 67px); }
+.exam-main { padding: 24px; overflow-y: auto; display: flex; flex-direction: column; gap: 18px; }
+.exam-sidebar { background: var(--card); border-right: 1px solid var(--card-border); padding: 20px; display: flex; flex-direction: column; gap: 16px; overflow-y: auto; }
+
+/* TIMER */
+.timer-box { background: var(--navy-mid); border: 1px solid var(--card-border); border-radius: 12px; padding: 14px 18px; text-align: center; }
+.timer-label { font-size: 11px; color: var(--text-muted); margin-bottom: 6px; }
+.timer-val { font-size: 32px; font-weight: 700; font-family: 'IBM Plex Mono', monospace; color: var(--gold); letter-spacing: 2px; }
+.timer-val.warning { color: var(--amber); }
+.timer-val.danger { color: var(--red); animation: pulse 1s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
+
+/* QUESTION GRID */
+.q-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+.q-dot { width: 32px; height: 32px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; cursor: pointer; transition: all 0.15s; border: 1.5px solid var(--navy-border); background: var(--navy-mid); color: var(--text-muted); }
+.q-dot:hover { border-color: var(--gold); }
+.q-dot.current { background: var(--gold); color: var(--navy); border-color: var(--gold); }
+.q-dot.answered { background: var(--navy-light); color: var(--text); border-color: var(--teal-dim); }
+.q-dot.flagged { border-color: var(--amber); background: rgba(255,165,2,0.1); color: var(--amber); }
+.q-dot.correct { background: rgba(46,213,115,0.15); border-color: var(--green); color: var(--green); }
+.q-dot.wrong { background: rgba(255,71,87,0.15); border-color: var(--red); color: var(--red); }
+
+/* QUESTION CARD */
+.q-card { background: var(--card); border: 1px solid var(--card-border); border-radius: var(--radius-lg); padding: 28px; }
+.q-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+.q-num { font-size: 13px; color: var(--text-muted); font-weight: 600; }
+.q-tags { display: flex; gap: 8px; }
+.q-tag { padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+.flag-btn { display: flex; align-items: center; gap: 6px; padding: 6px 14px; border: 1px solid var(--navy-border); border-radius: 8px; background: transparent; color: var(--text-muted); font-family: 'Cairo', sans-serif; font-size: 13px; cursor: pointer; transition: all 0.2s; }
+.flag-btn:hover, .flag-btn.flagged { border-color: var(--amber); color: var(--amber); background: rgba(255,165,2,0.08); }
+.q-text { font-size: 16px; line-height: 1.8; color: var(--text); margin-bottom: 6px; }
+.q-text-en { font-size: 13px; color: var(--text-dim); line-height: 1.6; margin-bottom: 22px; font-style: italic; border-right: 2px solid var(--navy-border); padding-right: 10px; }
+.choices { display: flex; flex-direction: column; gap: 10px; }
+.choice { display: flex; align-items: flex-start; gap: 14px; padding: 14px 18px; border: 1.5px solid var(--navy-border); border-radius: 10px; cursor: pointer; transition: all 0.2s; background: var(--navy-mid); }
+.choice:hover:not(.disabled) { border-color: var(--gold); background: rgba(201,168,76,0.06); }
+.choice.selected { border-color: var(--gold); background: rgba(201,168,76,0.1); }
+.choice.correct { border-color: var(--green); background: rgba(46,213,115,0.1); }
+.choice.wrong { border-color: var(--red); background: rgba(255,71,87,0.1); }
+.choice.disabled { cursor: default; pointer-events: none; }
+.choice-letter { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; border: 1.5px solid var(--text-dim); color: var(--text-muted); flex-shrink: 0; }
+.choice.selected .choice-letter { background: var(--gold); border-color: var(--gold); color: var(--navy); }
+.choice.correct .choice-letter { background: var(--green); border-color: var(--green); color: var(--navy); }
+.choice.wrong .choice-letter { background: var(--red); border-color: var(--red); color: white; }
+.choice-text { font-size: 14px; line-height: 1.6; flex: 1; padding-top: 3px; }
+
+/* EXPLANATION */
+.explanation { background: var(--navy-mid); border: 1px solid var(--navy-border); border-radius: 10px; padding: 18px; margin-top: 14px; display: none; }
+.explanation.show { display: block; }
+.exp-title { font-size: 13px; font-weight: 700; color: var(--gold); margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+.exp-text { font-size: 14px; line-height: 1.8; color: var(--text-muted); }
+
+/* LANG TOGGLE */
+.lang-row { display: flex; gap: 8px; align-items: center; margin-bottom: 16px; flex-wrap: wrap; }
+.lang-btn { padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 700; border: 1px solid var(--navy-border); background: transparent; color: var(--text-muted); cursor: pointer; font-family: 'Cairo', sans-serif; transition: all 0.2s; }
+.lang-btn.active { background: var(--gold); color: var(--navy); border-color: var(--gold); }
+.nav-btns { display: flex; gap: 10px; }
+.nav-btn { flex: 1; padding: 12px; border-radius: 10px; font-family: 'Cairo', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; border: 1px solid var(--navy-border); background: var(--navy-mid); color: var(--text); transition: all 0.2s; }
+.nav-btn:hover { border-color: var(--gold); color: var(--gold); }
+.nav-btn.primary { background: var(--gold); color: var(--navy); border-color: var(--gold); }
+.nav-btn.primary:hover { opacity: 0.9; }
+.nav-btn.danger { background: rgba(255,71,87,0.1); border-color: var(--red); color: var(--red); }
+
+/* TOOLS */
+.tools-row { display: flex; gap: 8px; }
+.tool-btn { padding: 8px 14px; border-radius: 8px; border: 1px solid var(--navy-border); background: var(--navy-mid); color: var(--text-muted); font-size: 13px; cursor: pointer; font-family: 'Cairo', sans-serif; display: flex; align-items: center; gap: 6px; transition: all 0.2s; }
+.tool-btn:hover { border-color: var(--teal); color: var(--teal); }
+
+/* MODAL */
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 20px; display: none; }
+.modal-overlay.show { display: flex; }
+.modal-box { background: var(--card); border: 1px solid var(--card-border); border-radius: var(--radius-lg); padding: 28px; width: 100%; max-width: 520px; position: relative; }
+.modal-close { position: absolute; top: 16px; left: 16px; width: 30px; height: 30px; border-radius: 50%; border: 1px solid var(--navy-border); background: transparent; color: var(--text-muted); font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.modal-title { font-size: 18px; font-weight: 700; color: var(--gold); margin-bottom: 16px; }
+#calcDisplay { background: var(--navy-mid); border: 1px solid var(--navy-border); border-radius: 8px; padding: 12px 16px; font-size: 22px; font-family: 'IBM Plex Mono', monospace; color: var(--text); text-align: left; margin-bottom: 12px; min-height: 52px; direction: ltr; }
+.calc-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.calc-btn { padding: 12px; border-radius: 8px; border: 1px solid var(--navy-border); background: var(--navy-mid); color: var(--text); font-size: 16px; font-family: 'IBM Plex Mono', monospace; cursor: pointer; transition: all 0.15s; }
+.calc-btn:hover { background: var(--navy-light); }
+.calc-btn.op { color: var(--gold); }
+.calc-btn.eq { background: var(--gold); color: var(--navy); font-weight: 700; border-color: var(--gold); }
+.calc-btn.clr { color: var(--red); }
+#wb-canvas { border: 1px solid var(--navy-border); border-radius: 8px; cursor: crosshair; background: white; width: 100%; height: 300px; }
+.wb-tools { display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
+.wb-clr { width: 26px; height: 26px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; }
+.wb-clr.active { border-color: var(--gold); }
+
+/* ─── REPORT SCREEN ─── */
+.report-wrap { flex: 1; padding: 28px; max-width: 860px; margin: 0 auto; width: 100%; }
+.report-header { text-align: center; padding: 32px 0 24px; }
+.report-score { font-size: 72px; font-weight: 900; color: var(--gold); line-height: 1; }
+.report-grade { font-size: 16px; color: var(--text-muted); margin-top: 6px; }
+.score-ring { width: 140px; height: 140px; border-radius: 50%; border: 6px solid var(--navy-light); position: relative; margin: 0 auto 16px; display: flex; align-items: center; justify-content: center; }
+.score-ring svg { position: absolute; inset: 0; transform: rotate(-90deg); }
+.domain-bars { display: flex; flex-direction: column; gap: 14px; margin: 18px 0; }
+.domain-bar-item { display: flex; align-items: center; gap: 14px; }
+.domain-name { width: 160px; font-size: 13px; color: var(--text-muted); flex-shrink: 0; text-align: right; }
+.domain-prog { flex: 1; height: 8px; background: var(--navy-mid); border-radius: 10px; overflow: hidden; }
+.domain-fill { height: 100%; border-radius: 10px; transition: width 0.8s ease; }
+.domain-pct { width: 40px; font-size: 13px; font-weight: 700; color: var(--text); text-align: left; }
+.analysis-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 20px; }
+.analysis-card { background: var(--card); border: 1px solid var(--card-border); border-radius: var(--radius); padding: 20px; }
+.analysis-card h4 { font-size: 14px; font-weight: 700; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+.strength-item, .weakness-item { display: flex; align-items: center; gap: 8px; padding: 7px 0; border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 13px; }
+.strength-item:last-child, .weakness-item:last-child { border-bottom: none; }
+.dot-g { width: 8px; height: 8px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
+.dot-r { width: 8px; height: 8px; border-radius: 50%; background: var(--red); flex-shrink: 0; }
+.reco-card { background: var(--card); border: 1px solid var(--card-border); border-radius: var(--radius); padding: 20px; margin-top: 16px; }
+.reco-card h4 { font-size: 14px; font-weight: 700; margin-bottom: 14px; color: var(--gold); }
+.reco-item { font-size: 13px; color: var(--text-muted); padding: 7px 0; border-bottom: 1px solid rgba(255,255,255,0.04); display: flex; gap: 10px; }
+.reco-item:last-child { border-bottom: none; }
+.similar-q-card { background: var(--card); border: 1px solid var(--card-border); border-radius: var(--radius); padding: 20px; margin-top: 16px; }
+.similar-q-card h4 { font-size: 14px; font-weight: 700; margin-bottom: 14px; color: var(--teal); }
+.similar-q-item { padding: 12px; background: var(--navy-mid); border-radius: 8px; margin-bottom: 10px; font-size: 13px; line-height: 1.6; color: var(--text-muted); }
+.report-actions { display: flex; gap: 12px; margin-top: 24px; justify-content: center; }
+.report-btn { padding: 12px 24px; border-radius: 10px; font-family: 'Cairo', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; border: 1px solid; transition: all 0.2s; }
+
+/* SIDEBAR LEGEND */
+.legend { font-size: 11px; color: var(--text-dim); display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.legend-item { display: flex; align-items: center; gap: 5px; }
+.leg-dot { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
+
+/* PROFILE TAB */
+.profile-wrap { flex: 1; padding: 28px; max-width: 720px; margin: 0 auto; width: 100%; }
+.profile-card { background: var(--card); border: 1px solid var(--card-border); border-radius: var(--radius-lg); padding: 28px; margin-bottom: 18px; }
+.profile-card h3 { font-size: 15px; font-weight: 700; margin-bottom: 16px; color: var(--gold); }
+.info-row { display: flex; gap: 14px; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+.info-label { font-size: 13px; color: var(--text-muted); width: 140px; flex-shrink: 0; }
+.info-val { font-size: 13px; color: var(--text); font-weight: 600; }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════ REGISTRATION ══════════════════════════════════════ -->
+<div id="screen-register" class="screen active">
+  <div class="reg-wrap">
+    <div class="reg-card">
+      <div style="text-align:center; margin-bottom:24px;">
+        <div style="font-size:36px; margin-bottom:8px;">🎯</div>
+        <div class="reg-title">PMP Elite Training Platform</div>
+        <div class="reg-sub">د. محمد عطية — PMI-ATP Instructor | ادخل بياناتك للبدء</div>
+      </div>
+      <div class="form-grid">
+        <div class="form-group full">
+          <label>الاسم الكامل *</label>
+          <input id="r-name" type="text" placeholder="مثال: أحمد محمد علي">
+        </div>
+        <div class="form-group">
+          <label>البريد الإلكتروني *</label>
+          <input id="r-email" type="email" placeholder="example@email.com" dir="ltr">
+        </div>
+        <div class="form-group">
+          <label>رقم الجوال</label>
+          <input id="r-phone" type="tel" placeholder="+966 5xx xxx xxxx" dir="ltr">
+        </div>
+        <div class="form-group">
+          <label>الدولة / المدينة *</label>
+          <input id="r-city" type="text" placeholder="مثال: الرياض — السعودية">
+        </div>
+        <div class="form-group">
+          <label>مجال العمل</label>
+          <input id="r-field" type="text" placeholder="مثال: تكنولوجيا المعلومات">
+        </div>
+        <div class="form-group">
+          <label>سنوات الخبرة</label>
+          <select id="r-exp">
+            <option value="">اختر...</option>
+            <option>أقل من 3 سنوات</option>
+            <option>3–5 سنوات</option>
+            <option>5–10 سنوات</option>
+            <option>أكثر من 10 سنوات</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>هل سبق دخول اختبار PMP؟</label>
+          <select id="r-prev">
+            <option value="">اختر...</option>
+            <option>لا، هذه المرة الأولى</option>
+            <option>نعم، دخلت من قبل</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>التاريخ المستهدف للاختبار</label>
+          <input id="r-date" type="date">
+        </div>
+        <div class="form-group">
+          <label>هل تم تعبئة طلب PMI؟</label>
+          <select id="r-pmi">
+            <option value="">اختر...</option>
+            <option>نعم، تم تعبئة الطلب</option>
+            <option>لا، لم يتم بعد</option>
+            <option>قيد المراجعة</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>مستوى المتدرب الحالي</label>
+          <select id="r-level">
+            <option value="">اختر...</option>
+            <option>مبتدئ</option>
+            <option>متوسط</option>
+            <option>متقدم</option>
+          </select>
+        </div>
+        <div class="form-group full">
+          <label>أهم التحديات والنقاط التي تحتاج دعماً فيها</label>
+          <textarea id="r-challenges" placeholder="مثال: أجد صعوبة في أسئلة Agile وإدارة المخاطر..."></textarea>
+        </div>
+      </div>
+      <button class="btn-primary" onclick="register()">🚀 انضم للمنصة وابدأ رحلتك</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════ TOP NAV ══════════════════════════════════════ -->
+<div id="main-nav" style="display:none;">
+  <div class="top-bar">
+    <div class="logo">
+      <div class="logo-icon">P</div>
+      <div>
+        <div class="logo-text">PMP Elite Platform</div>
+        <div class="logo-sub">د. محمد عطية — PMI-ATP</div>
+      </div>
+    </div>
+    <div class="nav-tabs">
+      <button class="nav-tab active" onclick="showTab('dashboard')">📊 لوحة التحكم</button>
+      <button class="nav-tab" onclick="showTab('exam')">📝 الاختبار التجريبي</button>
+      <button class="nav-tab" onclick="showTab('profile')">👤 الملف الشخصي</button>
+    </div>
+    <div class="user-badge" onclick="showTab('profile')">
+      <span>👤</span>
+      <span id="nav-name">المتدرب</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════ DASHBOARD ══════════════════════════════════════ -->
+<div id="screen-dashboard" class="screen" style="display:none; flex-direction:column;">
+  <div class="dash-wrap">
+    <div class="welcome-bar">
+      <div class="avatar" id="dash-avatar">أ</div>
+      <div class="welcome-info">
+        <h2>أهلاً، <span id="dash-name">المتدرب</span> 👋</h2>
+        <p id="dash-meta">استمر في المراجعة — أنت في الطريق الصحيح!</p>
+      </div>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-label">إجمالي التقدم</div>
+        <div class="stat-val" id="stat-progress">0%</div>
+        <div class="stat-sub">من خطة الاجتياز</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">المهام المنجزة</div>
+        <div class="stat-val" id="stat-done">0/12</div>
+        <div class="stat-sub">موضوع مكتمل</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">متوسط الدرجات</div>
+        <div class="stat-val" id="stat-avg">—</div>
+        <div class="stat-sub">في الاختبارات</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">أيام حتى الاختبار</div>
+        <div class="stat-val" id="stat-days">—</div>
+        <div class="stat-sub">يوم متبقي</div>
+      </div>
+    </div>
+
+    <div class="dash-grid">
+      <!-- CHECKLIST -->
+      <div class="section-card">
+        <div class="section-head">
+          <h3>📋 خطة الاجتياز — Checklist</h3>
+          <div style="font-size:12px; color:var(--text-muted);" id="checklist-counter">0 / 12 مكتمل</div>
+        </div>
+        <div class="section-body" style="max-height:420px; overflow-y:auto;" id="checklist-body">
+          <!-- Injected by JS -->
+        </div>
+      </div>
+
+      <!-- RIGHT COLUMN -->
+      <div style="display:flex; flex-direction:column; gap:16px;">
+        <!-- Overall Progress -->
+        <div class="section-card">
+          <div class="section-head"><h3>📈 تقدم Domains</h3></div>
+          <div class="section-body" id="domain-progress-body">
+            <div class="prog-wrap">
+              <div class="prog-label"><span>Domain: People</span><span id="prog-people">0%</span></div>
+              <div class="prog-bar"><div class="prog-fill" id="fill-people" style="width:0%"></div></div>
+            </div>
+            <div class="prog-wrap" style="margin-top:10px;">
+              <div class="prog-label"><span>Domain: Process</span><span id="prog-process">0%</span></div>
+              <div class="prog-bar"><div class="prog-fill green" id="fill-process" style="width:0%"></div></div>
+            </div>
+            <div class="prog-wrap" style="margin-top:10px;">
+              <div class="prog-label"><span>Business Environment</span><span id="prog-biz">0%</span></div>
+              <div class="prog-bar"><div class="prog-fill teal" id="fill-biz" style="width:0%"></div></div>
+            </div>
+            <div class="prog-wrap" style="margin-top:10px;">
+              <div class="prog-label"><span>Agile & Hybrid</span><span id="prog-agile">0%</span></div>
+              <div class="prog-bar"><div class="prog-fill" id="fill-agile" style="width:0%; background: linear-gradient(90deg,#0f6e56,var(--teal))"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="section-card">
+          <div class="section-head"><h3>⚡ إجراءات سريعة</h3></div>
+          <div class="section-body">
+            <div class="action-btns">
+              <div class="action-btn" onclick="showTab('exam')">
+                <div class="ab-icon">📝</div>
+                <div class="ab-label">ابدأ الاختبار</div>
+              </div>
+              <div class="action-btn" onclick="showTab('profile')">
+                <div class="ab-icon">👤</div>
+                <div class="ab-label">ملفي الشخصي</div>
+              </div>
+              <div class="action-btn" onclick="openCalc()">
+                <div class="ab-icon">🧮</div>
+                <div class="ab-label">الآلة الحاسبة</div>
+              </div>
+              <div class="action-btn" onclick="openWB()">
+                <div class="ab-icon">✏️</div>
+                <div class="ab-label">Whiteboard</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════ EXAM SCREEN ══════════════════════════════════════ -->
+<div id="screen-exam" class="screen" style="display:none; flex-direction:column;">
+  <!-- Exam not started -->
+  <div id="exam-start-view" style="flex:1; display:flex; align-items:center; justify-content:center; padding:40px;">
+    <div style="background:var(--card); border:1px solid var(--card-border); border-radius:var(--radius-lg); padding:48px; max-width:560px; width:100%; text-align:center; position:relative; overflow:hidden;">
+      <div style="position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg,transparent,var(--gold),transparent);"></div>
+      <div style="font-size:40px; margin-bottom:16px;">🏆</div>
+      <h2 style="font-size:22px; font-weight:700; color:var(--gold); margin-bottom:8px;">الاختبار التجريبي الدولي</h2>
+      <p style="font-size:14px; color:var(--text-muted); margin-bottom:28px; line-height:1.8;">25 سؤال محاكاة حقيقية بمستوى اختبار PMP الدولي<br>مع عداد وقت، تفسير لكل سؤال، وتقرير تفصيلي في النهاية</p>
+      <div style="margin-bottom:24px;">
+        <div style="font-size:13px; color:var(--text-muted); margin-bottom:10px; font-weight:600;">لغة الاختبار</div>
+        <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap;" id="start-lang-btns">
+          <button class="lang-btn active" onclick="selectStartLang('ar', this)">🇸🇦 عربي</button>
+          <button class="lang-btn" onclick="selectStartLang('en', this)">🇺🇸 English</button>
+          <button class="lang-btn" onclick="selectStartLang('both', this)">🌐 عربي + English</button>
+        </div>
+      </div>
+      <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; margin-bottom:28px;">
+        <div style="background:var(--navy-mid); border-radius:8px; padding:14px; border:1px solid var(--navy-border);">
+          <div style="font-size:22px; font-weight:700; color:var(--gold);">25</div>
+          <div style="font-size:11px; color:var(--text-muted); margin-top:4px;">سؤال</div>
+        </div>
+        <div style="background:var(--navy-mid); border-radius:8px; padding:14px; border:1px solid var(--navy-border);">
+          <div style="font-size:22px; font-weight:700; color:var(--gold);">50</div>
+          <div style="font-size:11px; color:var(--text-muted); margin-top:4px;">دقيقة</div>
+        </div>
+        <div style="background:var(--navy-mid); border-radius:8px; padding:14px; border:1px solid var(--navy-border);">
+          <div style="font-size:22px; font-weight:700; color:var(--gold);">3</div>
+          <div style="font-size:11px; color:var(--text-muted); margin-top:4px;">Domains</div>
+        </div>
+      </div>
+      <button class="btn-primary" onclick="startExam()" style="font-size:17px; padding:16px;">🚀 ابدأ الاختبار الآن</button>
+    </div>
+  </div>
+
+  <!-- Exam active -->
+  <div id="exam-active-view" style="display:none; flex:1; display:none;">
+    <div class="exam-wrap">
+      <!-- MAIN -->
+      <div class="exam-main">
+        <div class="lang-row">
+          <span style="font-size:13px; color:var(--text-muted);">ترجمة:</span>
+          <button class="lang-btn active" id="lb-ar" onclick="setLang('ar')">🇸🇦 عربي</button>
+          <button class="lang-btn" id="lb-en" onclick="setLang('en')">🇺🇸 English</button>
+          <button class="lang-btn" id="lb-both" onclick="setLang('both')">🌐 كلاهما</button>
+          <div style="margin-right:auto; display:flex; gap:8px;">
+            <button class="tool-btn" onclick="openCalc()">🧮 آلة حاسبة</button>
+            <button class="tool-btn" onclick="openWB()">✏️ Whiteboard</button>
+          </div>
+        </div>
+
+        <div class="q-card" id="q-card">
+          <div class="q-header">
+            <span class="q-num" id="q-num-label">السؤال 1 من 25</span>
+            <div class="q-tags">
+              <span class="q-tag tag-people" id="q-domain-tag">People</span>
+            </div>
+            <button class="flag-btn" id="flag-btn" onclick="toggleFlag()">🚩 Flag للمراجعة</button>
+          </div>
+          <div class="q-text" id="q-text-ar"></div>
+          <div class="q-text-en" id="q-text-en" style="display:none;"></div>
+          <div class="choices" id="choices-wrap"></div>
+          <div class="explanation" id="explanation">
+            <div class="exp-title">💡 التفسير والشرح</div>
+            <div class="exp-text" id="exp-text"></div>
+          </div>
+        </div>
+
+        <div class="nav-btns">
+          <button class="nav-btn" onclick="prevQ()">⟵ السابق</button>
+          <button class="nav-btn primary" id="next-btn" onclick="nextQ()">التالي ⟶</button>
+          <button class="nav-btn danger" onclick="confirmFinish()">إنهاء الاختبار</button>
+        </div>
+      </div>
+
+      <!-- SIDEBAR -->
+      <div class="exam-sidebar">
+        <div class="timer-box">
+          <div class="timer-label">⏱ الوقت المتبقي</div>
+          <div class="timer-val" id="timer-display">50:00</div>
+        </div>
+
+        <div>
+          <div style="font-size:13px; font-weight:600; margin-bottom:10px; color:var(--text-muted);">خريطة الأسئلة</div>
+          <div class="q-grid" id="q-grid"></div>
+        </div>
+
+        <div class="legend">
+          <div class="legend-item"><div class="leg-dot" style="background:var(--gold);"></div> حالي</div>
+          <div class="legend-item"><div class="leg-dot" style="background:var(--navy-light);"></div> تمت الإجابة</div>
+          <div class="legend-item"><div class="leg-dot" style="background:rgba(255,165,2,0.3);"></div> Flagged</div>
+          <div class="legend-item"><div class="leg-dot" style="background:rgba(46,213,115,0.3);"></div> صحيح</div>
+          <div class="legend-item"><div class="leg-dot" style="background:rgba(255,71,87,0.3);"></div> خاطئ</div>
+          <div class="legend-item"><div class="leg-dot" style="background:var(--navy-mid);"></div> لم يتم</div>
+        </div>
+
+        <div style="background:var(--navy-mid); border:1px solid var(--navy-border); border-radius:10px; padding:14px;">
+          <div style="font-size:12px; color:var(--text-muted); margin-bottom:10px; font-weight:600;">إحصائيات سريعة</div>
+          <div style="display:flex; justify-content:space-between; font-size:13px; padding:5px 0; border-bottom:1px solid rgba(255,255,255,0.04);">
+            <span style="color:var(--text-muted);">تمت الإجابة</span>
+            <span style="color:var(--text); font-weight:700;" id="answered-count">0</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; font-size:13px; padding:5px 0; border-bottom:1px solid rgba(255,255,255,0.04);">
+            <span style="color:var(--text-muted);">Flagged</span>
+            <span style="color:var(--amber); font-weight:700;" id="flagged-count">0</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; font-size:13px; padding:5px 0;">
+            <span style="color:var(--text-muted);">لم تتم الإجابة</span>
+            <span style="color:var(--red); font-weight:700;" id="unanswered-count">25</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════ REPORT ══════════════════════════════════════ -->
+<div id="screen-report" class="screen" style="display:none; flex-direction:column; overflow-y:auto;">
+  <div class="report-wrap">
+    <div class="report-header">
+      <div class="score-ring">
+        <svg viewBox="0 0 140 140"><circle cx="70" cy="70" r="60" fill="none" stroke="#1C3461" stroke-width="10"/><circle id="score-circle" cx="70" cy="70" r="60" fill="none" stroke="#C9A84C" stroke-width="10" stroke-linecap="round" stroke-dasharray="377" stroke-dashoffset="377"/></svg>
+        <div style="text-align:center;">
+          <div class="report-score" id="rep-score">0%</div>
+        </div>
+      </div>
+      <div class="report-grade" id="rep-grade"></div>
+      <div style="display:flex; gap:16px; justify-content:center; margin-top:18px;">
+        <div style="text-align:center;"><div style="font-size:22px; font-weight:700; color:var(--green);" id="rep-correct">0</div><div style="font-size:12px; color:var(--text-muted);">صحيح</div></div>
+        <div style="text-align:center;"><div style="font-size:22px; font-weight:700; color:var(--red);" id="rep-wrong">0</div><div style="font-size:12px; color:var(--text-muted);">خاطئ</div></div>
+        <div style="text-align:center;"><div style="font-size:22px; font-weight:700; color:var(--amber);" id="rep-time">0</div><div style="font-size:12px; color:var(--text-muted);">دقيقة مستخدمة</div></div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-head"><h3>📊 الأداء حسب Domain</h3></div>
+      <div class="section-body">
+        <div class="domain-bars" id="domain-bars"></div>
+      </div>
+    </div>
+
+    <div class="analysis-grid">
+      <div class="analysis-card">
+        <h4 style="color:var(--green);">✅ نقاط القوة</h4>
+        <div id="strengths-list"></div>
+      </div>
+      <div class="analysis-card">
+        <h4 style="color:var(--red);">⚠️ نقاط الضعف</h4>
+        <div id="weaknesses-list"></div>
+      </div>
+    </div>
+
+    <div class="reco-card">
+      <h4>🎯 أهم نقاط التركيز قبل الاختبار</h4>
+      <div id="recommendations-list"></div>
+    </div>
+
+    <div class="similar-q-card">
+      <h4>🔁 أسئلة مشابهة لتعزيز الفهم (بناءً على أخطائك)</h4>
+      <div id="similar-questions-list"></div>
+    </div>
+
+    <div class="report-actions">
+      <button class="report-btn" style="background:var(--gold); color:var(--navy); border-color:var(--gold);" onclick="showTab('exam')">🔄 إعادة الاختبار</button>
+      <button class="report-btn" style="background:transparent; color:var(--teal); border-color:var(--teal);" onclick="showTab('dashboard')">📊 لوحة التحكم</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════ PROFILE ══════════════════════════════════════ -->
+<div id="screen-profile" class="screen" style="display:none; flex-direction:column; overflow-y:auto;">
+  <div class="profile-wrap">
+    <div style="text-align:center; padding:32px 0 24px;">
+      <div class="avatar" id="prof-avatar" style="width:70px; height:70px; font-size:28px; margin:0 auto 14px;">أ</div>
+      <div style="font-size:20px; font-weight:700;" id="prof-name">—</div>
+      <div style="font-size:13px; color:var(--gold); margin-top:4px;">PMP Candidate — VIP Group</div>
+    </div>
+
+    <div class="profile-card">
+      <h3>👤 البيانات الشخصية</h3>
+      <div class="info-row"><div class="info-label">الاسم الكامل</div><div class="info-val" id="pi-name">—</div></div>
+      <div class="info-row"><div class="info-label">البريد الإلكتروني</div><div class="info-val" id="pi-email">—</div></div>
+      <div class="info-row"><div class="info-label">رقم الجوال</div><div class="info-val" id="pi-phone">—</div></div>
+      <div class="info-row"><div class="info-label">الدولة / المدينة</div><div class="info-val" id="pi-city">—</div></div>
+      <div class="info-row"><div class="info-label">مجال العمل</div><div class="info-val" id="pi-field">—</div></div>
+      <div class="info-row"><div class="info-label">سنوات الخبرة</div><div class="info-val" id="pi-exp">—</div></div>
+      <div class="info-row"><div class="info-label">المستوى الحالي</div><div class="info-val" id="pi-level">—</div></div>
+      <div class="info-row"><div class="info-label">التاريخ المستهدف</div><div class="info-val" id="pi-date">—</div></div>
+      <div class="info-row"><div class="info-label">طلب PMI</div><div class="info-val" id="pi-pmi">—</div></div>
+    </div>
+
+    <div class="profile-card">
+      <h3>⚡ التحديات والأهداف</h3>
+      <div style="font-size:14px; color:var(--text-muted); line-height:1.8;" id="pi-challenges">—</div>
+    </div>
+
+    <div class="profile-card">
+      <h3>📊 إحصائيات الأداء</h3>
+      <div class="info-row"><div class="info-label">آخر درجة</div><div class="info-val" id="pi-last-score">لم تبدأ بعد</div></div>
+      <div class="info-row"><div class="info-label">عدد الاختبارات</div><div class="info-val" id="pi-exam-count">0</div></div>
+      <div class="info-row"><div class="info-label">الأسئلة المكتملة</div><div class="info-val" id="pi-q-done">0</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════ MODALS ══════════════════════════════════════ -->
+<!-- Calculator -->
+<div class="modal-overlay" id="calc-modal">
+  <div class="modal-box" style="max-width:340px;">
+    <button class="modal-close" onclick="closeModal('calc-modal')">✕</button>
+    <div class="modal-title">🧮 الآلة الحاسبة</div>
+    <div id="calcDisplay">0</div>
+    <div class="calc-grid">
+      <button class="calc-btn clr" onclick="calcAction('C')">C</button>
+      <button class="calc-btn op" onclick="calcAction('±')">±</button>
+      <button class="calc-btn op" onclick="calcAction('%')">%</button>
+      <button class="calc-btn op" onclick="calcAction('/')">÷</button>
+      <button class="calc-btn" onclick="calcAction('7')">7</button>
+      <button class="calc-btn" onclick="calcAction('8')">8</button>
+      <button class="calc-btn" onclick="calcAction('9')">9</button>
+      <button class="calc-btn op" onclick="calcAction('*')">×</button>
+      <button class="calc-btn" onclick="calcAction('4')">4</button>
+      <button class="calc-btn" onclick="calcAction('5')">5</button>
+      <button class="calc-btn" onclick="calcAction('6')">6</button>
+      <button class="calc-btn op" onclick="calcAction('-')">−</button>
+      <button class="calc-btn" onclick="calcAction('1')">1</button>
+      <button class="calc-btn" onclick="calcAction('2')">2</button>
+      <button class="calc-btn" onclick="calcAction('3')">3</button>
+      <button class="calc-btn op" onclick="calcAction('+')">+</button>
+      <button class="calc-btn" onclick="calcAction('0')" style="grid-column:span 2;">0</button>
+      <button class="calc-btn" onclick="calcAction('.')">.</button>
+      <button class="calc-btn eq" onclick="calcAction('=')">=</button>
+    </div>
+  </div>
+</div>
+
+<!-- Whiteboard -->
+<div class="modal-overlay" id="wb-modal">
+  <div class="modal-box" style="max-width:620px;">
+    <button class="modal-close" onclick="closeModal('wb-modal')">✕</button>
+    <div class="modal-title">✏️ Whiteboard</div>
+    <div class="wb-tools">
+      <div class="wb-clr active" style="background:#1a1a2e;" data-clr="#1a1a2e" onclick="setWBColor(this)"></div>
+      <div class="wb-clr" style="background:#e74c3c;" data-clr="#e74c3c" onclick="setWBColor(this)"></div>
+      <div class="wb-clr" style="background:#2ecc71;" data-clr="#2ecc71" onclick="setWBColor(this)"></div>
+      <div class="wb-clr" style="background:#3498db;" data-clr="#3498db" onclick="setWBColor(this)"></div>
+      <div class="wb-clr" style="background:#f39c12;" data-clr="#f39c12" onclick="setWBColor(this)"></div>
+      <div class="wb-clr" style="background:#9b59b6;" data-clr="#9b59b6" onclick="setWBColor(this)"></div>
+      <input type="range" min="1" max="20" value="3" id="wb-size" style="width:100px;">
+      <button class="calc-btn clr" onclick="clearWB()" style="padding:6px 14px; font-size:13px;">مسح الكل</button>
+    </div>
+    <canvas id="wb-canvas" width="580" height="300"></canvas>
+  </div>
+</div>
+
+<!-- Finish Confirm -->
+<div class="modal-overlay" id="finish-modal">
+  <div class="modal-box" style="max-width:400px; text-align:center;">
+    <div class="modal-title">⚠️ إنهاء الاختبار؟</div>
+    <p style="font-size:14px; color:var(--text-muted); margin-bottom:24px; line-height:1.7;">هل أنت متأكد من إنهاء الاختبار؟ سيتم احتساب الأسئلة غير المجابة كإجابات خاطئة.</p>
+    <div style="display:flex; gap:12px; justify-content:center;">
+      <button class="nav-btn danger" style="flex:none; padding:10px 24px;" onclick="finishExam()">نعم، أنهِ الاختبار</button>
+      <button class="nav-btn" style="flex:none; padding:10px 24px;" onclick="closeModal('finish-modal')">العودة للاختبار</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════
+//  DATA
+// ═══════════════════════════════════════════════════════
+const CHECKLIST_ITEMS = [
+  { id:1, title:'قيادة الفريق وتحفيزه', meta:'Domain: People', tag:'tag-people', label:'People', questions:40 },
+  { id:2, title:'حل النزاعات — Conflict Resolution', meta:'Domain: People', tag:'tag-people', label:'People', questions:30 },
+  { id:3, title:'Stakeholder Engagement & Management', meta:'Domain: People', tag:'tag-people', label:'People', questions:35 },
+  { id:4, title:'Scope & Schedule Management', meta:'Domain: Process', tag:'tag-process', label:'Process', questions:40 },
+  { id:5, title:'Risk Management & Issue Resolution', meta:'Domain: Process', tag:'tag-process', label:'Process', questions:40 },
+  { id:6, title:'Cost & Quality Management', meta:'Domain: Process', tag:'tag-process', label:'Process', questions:35 },
+  { id:7, title:'Communications & Procurement', meta:'Domain: Process', tag:'tag-process', label:'Process', questions:30 },
+  { id:8, title:'Benefits Realization & Strategy', meta:'Business Environment', tag:'tag-biz', label:'Biz Env', questions:25 },
+  { id:9, title:'Compliance & Governance', meta:'Business Environment', tag:'tag-biz', label:'Biz Env', questions:20 },
+  { id:10, title:'Scrum & Kanban Frameworks', meta:'Agile & Hybrid', tag:'tag-agile', label:'Agile', questions:40 },
+  { id:11, title:'Hybrid Approach & Tailoring', meta:'Agile & Hybrid', tag:'tag-agile', label:'Agile', questions:30 },
+  { id:12, title:'Mock Exam 1 (60 أسئلة)', meta:'اختبار محاكاة متكامل', tag:'tag-agile', label:'Mock', questions:60 },
+];
+
+const QUESTIONS = [
+  { ar:'أنت مدير مشروع وأحد أعضاء فريقك يعاني من انخفاض الأداء رغم امتلاكه للمهارات اللازمة. ما الخطوة الأولى التي يجب عليك اتخاذها؟', en:'You are a PM and one team member is underperforming despite having the required skills. What is the first step you should take?', domain:'People', choices_ar:['إحالته لمدير الموارد البشرية فوراً','عقد اجتماع خاص لفهم أسباب انخفاض الأداء','توثيق المشكلة في ملف المشروع','إعادة توزيع مهامه على أعضاء الفريق الآخرين'], choices_en:['Immediately escalate to HR','Hold a private meeting to understand root cause','Document the issue in project files','Reassign tasks to other team members'], correct:1, exp:'PMI تركز على الحوار المباشر وفهم الأسباب الجذرية أولاً قبل أي إجراء تصعيدي. Servant Leadership يعني دعم الفريق ومساعدته على النجاح. الإحالة لـ HR أو التوثيق يكون بعد محاولة الحل المباشر.', tag:'tag-people' },
+  { ar:'أنت في منتصف تنفيذ مشروع Agile وأضاف Sponsor طلباً جديداً خارج نطاق عمل الـ Sprint الحالي. ماذا تفعل؟', en:'Midway through an Agile project, the sponsor adds a new request outside the current sprint scope. What do you do?', domain:'Process', choices_ar:['تنفيذ الطلب فوراً لإرضاء الـ Sponsor','رفض الطلب بشكل قاطع','إضافة الطلب إلى Product Backlog ومناقشته في Sprint Planning القادم','وقف الـ Sprint الحالي وإعادة التخطيط'], choices_en:['Execute immediately to satisfy sponsor','Reject it outright','Add to Product Backlog and discuss in next Sprint Planning','Stop the sprint and replan'], correct:2, exp:'في Agile، أي طلب جديد يذهب إلى Product Backlog ويُقيَّم في Sprint Planning القادم حسب الأولوية. هذا يحافظ على استقرار الـ Sprint الحالي ويضمن التخطيط السليم للتغييرات.', tag:'tag-process' },
+  { ar:'أثناء مشروع، اكتشف فريقك خطأً في متطلبات العميل تم اكتشافه متأخراً. الخطأ سيؤثر على الجدول الزمني والتكلفة. ما أول خطوة؟', en:'During a project, your team discovers an error in client requirements discovered late. This will impact schedule and cost. What is the first step?', domain:'People', choices_ar:['إبلاغ العميل فوراً بالخطأ وتعديل العقد','تحليل تأثير الخطأ على المشروع أولاً','تجاهل الخطأ والمضي قدماً','زيادة الموارد لتعويض التأخير'], choices_en:['Immediately notify client and amend contract','Analyze the impact on the project first','Ignore the error and proceed','Add resources to compensate for the delay'], correct:1, exp:'قبل إبلاغ أي جهة أو اتخاذ إجراء، يجب فهم وتقدير التأثير الكامل للمشكلة. Impact Analysis هو الخطوة الأولى دائماً لأنها تمكّنك من تقديم معلومات دقيقة للمعنيين.', tag:'tag-people' },
+  { ar:'أنت تدير مشروعاً بميزانية محدودة وتلقيت عرضاً من مورد لتوفير خدمة بجودة أقل مقابل توفير 15% من التكلفة. ماذا تفعل؟', en:'You manage a project with limited budget and receive a vendor offer for lower-quality service saving 15% cost. What do you do?', domain:'Process', choices_ar:['قبول العرض فوراً لتوفير التكلفة','رفض العرض لأن الجودة غير قابلة للتنازل','تقييم التأثير على المشروع واستشارة أصحاب المصلحة','طلب عرض أسعار من موردين آخرين'], choices_en:['Accept immediately to save cost','Reject because quality is non-negotiable','Evaluate impact and consult stakeholders','Request quotes from other vendors'], correct:2, exp:'القرارات المتعلقة بالجودة والتكلفة تستوجب تقييم الأثر الكامل واستشارة أصحاب المصلحة المعنيين. التوفير في التكلفة قد يبدو مغرياً لكن تأثيره على scope وقبول العميل يجب تقييمه أولاً.', tag:'tag-process' },
+  { ar:'في مشروع Hybrid، أحد أعضاء الفريق يرفض العمل بطريقة Agile ويصر على النهج التقليدي فقط. كيف تتعامل معه؟', en:'In a Hybrid project, a team member refuses to work in an Agile way and insists on traditional approach only. How do you handle this?', domain:'People', choices_ar:['إجباره على اتباع منهجية Agile','إزالته من الفريق','فهم مخاوفه وشرح فوائد النهج الهجين وإشراكه في القرار','تجاهل موقفه والمضي قدماً'], choices_en:['Force them to follow Agile','Remove them from the team','Understand concerns, explain hybrid benefits, involve them in decisions','Ignore their stance and proceed'], correct:2, exp:'إدارة التغيير والمقاومة تتطلب الفهم والتواصل أولاً. Servant Leader يستمع ويشرح ويشرك الفريق في القرارات. الإجبار أو التجاهل يخلق بيئة سلبية ويضر بأداء الفريق.', tag:'tag-people' },
+  { ar:'تم تعيينك مديراً لمشروع وعند مراجعة الـ Scope Statement وجدت أن بعض المتطلبات غير واضحة. ما الخطوة التالية؟', en:'You are assigned as PM and upon reviewing the Scope Statement you find some requirements unclear. What is the next step?', domain:'Process', choices_ar:['البدء في التنفيذ وتوضيح المتطلبات لاحقاً','عقد اجتماع مع أصحاب المصلحة لتوضيح وتحديد المتطلبات','رفع تقرير للإدارة عن المشكلة','افتراض أن المتطلبات واضحة والمضي قدماً'], choices_en:['Start execution and clarify requirements later','Hold a meeting with stakeholders to clarify requirements','Report the issue to management','Assume requirements are clear and proceed'], correct:1, exp:'المتطلبات غير الواضحة هي مصدر رئيسي للمشاكل في المشاريع. يجب توضيحها مع أصحاب المصلحة قبل البدء في التنفيذ. هذا يتماشى مع مبدأ PMI في التخطيط السليم وتجنب إعادة العمل.', tag:'tag-process' },
+  { ar:'مشروعك يعاني من تأخير بسبب توقف أحد الموردين عن العمل. CPI = 0.9 و SPI = 0.85. ماذا تفعل أولاً؟', en:'Your project is delayed due to a vendor stoppage. CPI = 0.9 and SPI = 0.85. What do you do first?', domain:'Process', choices_ar:['تحديث الجدول الزمني فوراً','تفعيل خطة إدارة المخاطر المتعلقة بالموردين','رفع التقرير لـ Sponsor','إضافة موارد إضافية'], choices_en:['Update the schedule immediately','Activate the risk management plan for vendors','Report to sponsor','Add additional resources'], correct:1, exp:'CPI < 1 يعني تجاوز التكلفة و SPI < 1 يعني تأخير في الجدول. أول خطوة هي تفعيل خطة الاستجابة للمخاطر المعدة مسبقاً للتعامل مع مشاكل الموردين، وهذا مبدأ أساسي في Risk Management.', tag:'tag-process' },
+  { ar:'أنت تدير مشروعاً وأحد أعضاء الفريق يكشف لك عن معلومات سرية من شركته السابقة تساعد المشروع. ماذا تفعل؟', en:'A team member shares confidential information from their previous employer that would help the project. What do you do?', domain:'People', choices_ar:['استخدام المعلومات لأنها تفيد المشروع','رفض استخدام المعلومات وتوجيه العضو للامتثال لأخلاقيات العمل','إبلاغ الشركة السابقة','تجاهل الموقف'], choices_en:['Use the information since it benefits the project','Refuse and guide the member on professional ethics','Notify the previous employer','Ignore the situation'], correct:1, exp:'PMI Code of Ethics يُلزم بالنزاهة والامتثال. استخدام معلومات سرية لشركة أخرى هو انتهاك أخلاقي وقانوني. يجب رفض الاستخدام وتثقيف عضو الفريق حول أخلاقيات المهنة.', tag:'tag-people' },
+  { ar:'في اجتماع Sprint Retrospective، يشكو الفريق من كثرة الاجتماعات وقلة وقت التطوير الفعلي. كمدير مشروع Agile، ماذا تفعل؟', en:'In Sprint Retrospective, the team complains about too many meetings and not enough development time. As Agile PM, what do you do?', domain:'People', choices_ar:['تقليل كل الاجتماعات فوراً','مراجعة بروتوكول الاجتماعات مع الفريق وإيجاد حلول مشتركة','إلغاء الـ Retrospective نفسها','رفع شكوى الفريق لـ Sponsor'], choices_en:['Immediately reduce all meetings','Review meeting protocols with team and find joint solutions','Cancel the retrospective itself','Escalate team complaint to sponsor'], correct:1, exp:'Retrospective هي الأداة الأساسية للتحسين المستمر في Agile. الفريق الذي يتكلم عن مشاكل التدفق يجب أن يُشرك في إيجاد الحلول. Servant Leadership = تمكين الفريق من تحسين بيئة عمله.', tag:'tag-people' },
+  { ar:'أنت تدير مشروع تحويل رقمي وأحد أصحاب المصلحة الرئيسيين يعارض التغيير باستمرار. ما الاستراتيجية الأفضل؟', en:'You manage a digital transformation project and a key stakeholder consistently opposes change. What is the best strategy?', domain:'People', choices_ar:['تجاهله وإكمال المشروع','إشراكه مبكراً وفهم مخاوفه وإيجاد حلول ترضيه','تصعيد المشكلة للإدارة العليا فوراً','تقليل مشاركته في المشروع'], choices_en:['Ignore and complete the project','Engage early, understand concerns, find satisfying solutions','Immediately escalate to senior management','Reduce their involvement in the project'], correct:1, exp:'إدارة أصحاب المصلحة (Stakeholder Management) تستوجب الإشراك المبكر وفهم المخاوف. المعارضة غالباً تنبع من الخوف أو نقص المعلومات. الإشراك والتواصل الفعّال يحول المعارضين إلى داعمين.', tag:'tag-people' },
+  { ar:'مشروعك على وشك الانتهاء وتلقيت طلب تغيير كبير من العميل. ماذا تفعل؟', en:'Your project is near completion and you receive a major change request from the client. What do you do?', domain:'Process', choices_ar:['رفض الطلب لأن المشروع على وشك الانتهاء','تنفيذ التغيير فوراً لإرضاء العميل','تقييم التأثير ومتابعة إجراءات Change Control Process','تأجيل التغيير لمشروع لاحق'], choices_en:['Reject since project is nearly done','Implement immediately to satisfy client','Assess impact and follow Change Control Process','Defer change to a later project'], correct:2, exp:'في أي مرحلة من المشروع، طلبات التغيير يجب أن تمر عبر Change Control Process الرسمي. يشمل ذلك تحليل التأثير على النطاق والجدول والتكلفة والحصول على الموافقات المطلوبة قبل التنفيذ.', tag:'tag-process' },
+  { ar:'أنت تقود مشروعاً بنهج تنبؤي وكشفت إدارة المخاطر عن خطر عالي الاحتمالية وعالي التأثير. ما الإجراء الأنسب؟', en:'You lead a predictive project and risk management identified a high-probability, high-impact risk. What is the most appropriate action?', domain:'Process', choices_ar:['تقبّل الخطر وعدم فعل أي شيء','نقل الخطر بالكامل للمورد','وضع استراتيجية Mitigation وخطة Contingency','إلغاء المشروع'], choices_en:['Accept the risk and do nothing','Transfer the risk entirely to vendor','Develop a Mitigation strategy and Contingency plan','Cancel the project'], correct:2, exp:'خطر عالي الاحتمالية وعالي التأثير يتطلب نهجاً استباقياً: Mitigation (تقليل الاحتمالية أو التأثير) + Contingency Plan (خطة طوارئ جاهزة للتنفيذ عند وقوع الخطر). القبول مناسب للمخاطر المنخفضة فقط.', tag:'tag-process' },
+  { ar:'أحد أعضاء فريقك يقدم دائماً تقارير متفائلة لكنك تلاحظ أن الواقع مختلف. كيف تتعامل مع هذا الموقف؟', en:'A team member always submits optimistic reports but you observe that reality is different. How do you handle this?', domain:'People', choices_ar:['قبول التقارير لتجنب الصراع','مناقشته بشكل خاص وفهم سبب الفجوة بين التقارير والواقع','توبيخه أمام الفريق','إرسال تقرير للإدارة عن سلوكه'], choices_en:['Accept reports to avoid conflict','Privately discuss and understand the gap between reports and reality','Reprimand publicly in team meeting','Send report to management about behavior'], correct:1, exp:'الشفافية والاتصال الصادق من أهم قيم PMI. المناقشة الخاصة المباشرة تحل المشكلة بكفاءة مع الحفاظ على كرامة الشخص. فهم السبب (ضغط؟ خوف؟ عدم إدراك؟) يمكّنك من إيجاد الحل المناسب.', tag:'tag-people' },
+  { ar:'مشروع Agile وصل لنهاية Sprint ولم تكتمل جميع User Stories المخطط لها. كمدير المشروع ماذا تفعل؟', en:'An Agile Sprint ended without completing all planned User Stories. As PM, what do you do?', domain:'Process', choices_ar:['إضافة أيام للـ Sprint لإكمال العمل','نقل User Stories غير المكتملة للـ Backlog وتقييمها في Sprint Planning القادم','إلغاء الـ Sprint وإعادة التخطيط للمشروع كله','توبيخ الفريق على عدم الإنجاز'], choices_en:['Extend the sprint to complete the work','Move incomplete stories to backlog for next Sprint Planning','Cancel the sprint and replan the whole project','Reprimand the team for not completing'], correct:1, exp:'في Agile، الـ Sprints لها وقت ثابت (Timeboxed) ولا تُمدد. User Stories غير المكتملة ترجع للـ Product Backlog وتُعاد أولويتها في Sprint Planning التالي. هذا يحافظ على إيقاع Agile ويتيح إعادة ترتيب الأولويات.', tag:'tag-process' },
+  { ar:'تم تسليم المشروع للعميل ووقّع على قبوله، لكن بعد أسبوع أرسل قائمة ملاحظات. كيف تتعامل؟', en:'Project delivered and client signed acceptance, but a week later they sent a list of remarks. How do you respond?', domain:'Business Environment', choices_ar:['رفض الملاحظات لأن العميل وقّع على القبول','مراجعة العقد وتقييم الملاحظات ومعرفة إذا كانت ضمن النطاق المتفق عليه','تنفيذ جميع الملاحظات فوراً','إحالة الموضوع للمحامي فوراً'], choices_en:['Reject remarks since client signed acceptance','Review contract and assess if remarks are within agreed scope','Implement all remarks immediately','Immediately refer to legal counsel'], correct:1, exp:'حتى بعد التسليم، يجب مراجعة العقد وتقييم الملاحظات بموضوعية. بعض الملاحظات قد تكون ضمن الضمان أو نطاق العمل الأصلي. هذا النهج يحافظ على العلاقة مع العميل ويحمي حقوق المنظمة.', tag:'tag-biz' },
+  { ar:'أنت مدير مشروع وطُلب منك إعداد خطة الاتصالات. ما المعلومات الأساسية التي يجب أن تتضمنها؟', en:'You are asked to prepare a Communications Plan. What essential information must it include?', domain:'Process', choices_ar:['فقط قائمة بأسماء أصحاب المصلحة','من يحتاج ماذا ومتى وبأي طريقة وبأي تكرار','جدول اجتماعات أسبوعية فقط','تقرير يومي لجميع أعضاء الفريق'], choices_en:['Just a list of stakeholder names','Who needs what, when, how, and how often','Only a weekly meeting schedule','Daily report for all team members'], correct:1, exp:'خطة الاتصالات الفعّالة تجيب على: من؟ (المستلم) ماذا؟ (المحتوى) متى؟ (التوقيت) كيف؟ (القناة) بأي تكرار؟ هذا يضمن وصول المعلومات الصحيحة للشخص الصحيح في الوقت المناسب.', tag:'tag-process' },
+  { ar:'لاحظت أن أحد Stakeholders لديه سلطة عالية ولكن اهتمامه بالمشروع منخفض. كيف تتعامل معه في Stakeholder Matrix؟', en:'You notice a stakeholder with high authority but low interest in the project. How do you manage them in the Stakeholder Matrix?', domain:'People', choices_ar:['تجاهله تماماً','إشراكه بشكل مستمر كما بقية أصحاب المصلحة','Keep Satisfied — إبقاؤه راضياً مع عدم إغراقه بالتفاصيل','Keep Informed — إبقاؤه مطلعاً على كل شيء'], choices_en:['Ignore completely','Engage constantly like other stakeholders','Keep Satisfied — keep them happy without too much detail','Keep Informed — keep them updated on everything'], correct:2, exp:'في Stakeholder Matrix (Power/Interest Grid)، الشخص ذو السلطة العالية والاهتمام المنخفض يندرج في خانة "Keep Satisfied". نبقيه راضياً وندار علاقته بذكاء دون إغراقه بتفاصيل لا تهمه لأن سلطته قد تؤثر على المشروع.', tag:'tag-people' },
+  { ar:'مشروعك يعمل بنهج Predictive وCPI الحالي = 1.2. ماذا يعني ذلك وما القرار الأنسب؟', en:'Your Predictive project has a current CPI = 1.2. What does this mean and what is the best decision?', domain:'Process', choices_ar:['المشروع يعاني من تجاوز في التكلفة — زيادة الموارد','المشروع أقل تكلفة من المخطط — مراجعة الميزانية المتبقية وتوزيع الوفورات بذكاء','المشروع متأخر — تسريع الجدول','المشروع على المسار الصحيح تماماً — لا حاجة لأي إجراء'], choices_en:['Project over budget — add resources','Project under budget — review remaining budget and allocate savings wisely','Project is delayed — accelerate schedule','Project is on track — no action needed'], correct:1, exp:'CPI > 1 يعني أن المشروع يُنجز عملاً أكثر من المتوقع مقارنة بالتكلفة المصروفة (كفاءة في التكلفة). هذا وضع إيجابي لكن يستوجب مراجعة الأسباب والتخطيط للوفورات بشكل ذكي بدلاً من تجاهلها.', tag:'tag-process' },
+  { ar:'أنت في مرحلة Closing المشروع. أي من التالي ليس من مهام هذه المرحلة؟', en:'You are in the Closing phase. Which of the following is NOT a task in this phase?', domain:'Business Environment', choices_ar:['الحصول على قبول رسمي من العميل','أرشفة وثائق المشروع','وضع خطة إدارة المخاطر الأولية','توثيق الدروس المستفادة'], choices_en:['Obtain formal client acceptance','Archive project documents','Develop initial risk management plan','Document lessons learned'], correct:2, exp:'وضع خطة إدارة المخاطر الأولية هو نشاط مرحلة Planning وليس Closing. مرحلة الإغلاق تتضمن: الحصول على قبول رسمي، أرشفة الوثائق، توثيق الدروس المستفادة، إغلاق العقود، وإطلاق الموارد.', tag:'tag-biz' },
+  { ar:'فريقك Agile يعمل على Sprint وفجأة أبدى Product Owner رغبته في تغيير أهداف الـ Sprint. كيف تتصرف؟', en:'Your Agile team is mid-sprint and the Product Owner wants to change sprint goals. How do you respond?', domain:'Process', choices_ar:['الموافقة فوراً لأن Product Owner له الأولوية','شرح أن تغيير أهداف الـ Sprint في منتصفه يضر بالفريق وإعادة تقييم الأمر في Sprint Planning القادم','وقف الـ Sprint وتطبيق التغيير','التصويت مع الفريق على قبول التغيير'], choices_en:['Agree immediately as PO has priority','Explain that mid-sprint goal changes harm the team and revisit in next Sprint Planning','Stop sprint and implement change','Vote with team on accepting the change'], correct:1, exp:'في Scrum، Sprint Goal لا يتغير أثناء الـ Sprint. أهداف الـ Sprint محمية من التغيير المفاجئ للحفاظ على تركيز الفريق وإنتاجيته. أي تغيير في الأولويات يتم في Sprint Planning القادم. Product Owner يفهم هذا كجزء من آليات Scrum.', tag:'tag-process' },
+  { ar:'أنت تدير مشروعاً دولياً متعدد الثقافات. لاحظت أن أعضاء من ثقافات مختلفة يتعاملون بطرق متباينة. ما الأفضل؟', en:'You manage a multicultural international project. Team members from different cultures behave differently. What is best?', domain:'People', choices_ar:['فرض ثقافة المنظمة الأم على الجميع','تجاهل الفوارق الثقافية والتعامل مع الجميع بنفس الطريقة','تعلم وتقدير الاختلافات الثقافية وتكييف أسلوب التواصل وفقاً لكل ثقافة','تقسيم الفريق حسب الجنسيات'], choices_en:['Impose parent organization culture on everyone','Ignore cultural differences and treat everyone the same','Learn and appreciate cultural differences, adapt communication style accordingly','Separate team by nationalities'], correct:2, exp:'Cultural Intelligence هي كفاءة أساسية لمدير المشاريع الدولية. PMI يؤكد على احترام التنوع الثقافي وتكييف أسلوب القيادة والتواصل ليتناسب مع كل ثقافة. هذا يعزز الانسجام وفعالية الفريق.', tag:'tag-people' },
+  { ar:'تم تكليفك بمشروع ووجدت أن Sponsor يضغط لتقليص الجدول الزمني بنسبة 20% دون تعديل النطاق أو الميزانية. ماذا تفعل؟', en:'You are assigned a project and find the sponsor pressuring to cut schedule by 20% without adjusting scope or budget. What do you do?', domain:'Business Environment', choices_ar:['الموافقة فوراً لإرضاء الـ Sponsor','رفض المهمة كلياً','تحليل المخاطر والتأثير وعرض خيارات واضحة للـ Sponsor مع الآثار المترتبة على كل خيار','تعديل الجدول دون إبلاغ أصحاب المصلحة'], choices_en:['Agree immediately to satisfy sponsor','Reject the project entirely','Analyze risks and impact, present clear options to sponsor with consequences','Adjust schedule without informing stakeholders'], correct:2, exp:'Triple Constraint: تقليص الجدول بنسبة 20% دون تعديل النطاق أو الميزانية سيؤثر حتماً على الجودة. دورك كـ PM هو تحليل التأثير بموضوعية وعرض خيارات واضحة (Fast Track، Crashing، تقليص النطاق) مع مخاطر كل خيار، وليس الموافقة العمياء.', tag:'tag-biz' },
+  { ar:'أنت تدير مشروع بنهج Hybrid وطلب Sponsor تقرير حالة أسبوعي. ما المكونات الأساسية للتقرير؟', en:'You manage a Hybrid project and sponsor requests a weekly status report. What are the key components?', domain:'Process', choices_ar:['قائمة مهام الأسبوع فقط','نسبة الإنجاز، CPI، SPI، المخاطر الحالية، القضايا المفتوحة، والإجراءات المقررة','أسماء أعضاء الفريق وساعات عملهم','بريد إلكتروني مختصر بجملة واحدة'], choices_en:['Only a task list for the week','% complete, CPI, SPI, current risks, open issues, and planned actions','Team member names and work hours','A brief one-sentence email'], correct:1, exp:'تقرير الحالة الاحترافي يشمل: نسبة الإنجاز مقابل الخطة، مؤشرات الأداء (CPI/SPI)، المخاطر والقضايا المفتوحة، والإجراءات المقررة. هذا يعطي Sponsor صورة كاملة وقابلة للتنفيذ عن وضع المشروع.', tag:'tag-process' },
+  { ar:'في نهاية مشروع Agile ناجح، كيف تتعامل مع توثيق الدروس المستفادة؟', en:'At the end of a successful Agile project, how do you handle documenting lessons learned?', domain:'Business Environment', choices_ar:['تجاهلها لأن المشروع نجح ولا حاجة للتوثيق','جمع الدروس في Retrospective النهائي وتوثيقها في مخزن المعرفة للاستفادة منها مستقبلاً','كتابة تقرير نهائي لـ Sponsor فقط','انتظار مشروع فاشل للتعلم منه'], choices_en:['Ignore since project succeeded','Gather lessons in final Retrospective and document in knowledge repository for future use','Write a final report for sponsor only','Wait for a failed project to learn from'], correct:1, exp:'توثيق الدروس المستفادة واجب في كل مشروع سواء نجح أو لا. في Agile يتم ذلك في كل Retrospective وخاصة النهائي. التوثيق في مخزن المعرفة يمكّن الفرق الأخرى من الاستفادة من التجربة ويُحسّن الأداء المؤسسي.', tag:'tag-biz' },
+  { ar:'أنت مدير مشروع وتلقيت عرضاً شخصياً من مورد يرغب في الحصول على العقد. كيف تتصرف؟', en:'You are a PM and receive a personal gift from a vendor seeking to win a contract. How do you respond?', domain:'People', choices_ar:['قبول الهدية كمجاملة اجتماعية','رفض الهدية والإفصاح عن الأمر للإدارة وفق سياسة الشركة','قبول الهدية وعدم التحيز في قرارك','رفض الهدية بهدوء دون الإفصاح'], choices_en:['Accept as a social courtesy','Decline and disclose to management per company policy','Accept and remain unbiased in your decision','Decline quietly without disclosure'], correct:1, exp:'PMI Code of Ethics يُلزم بالنزاهة والشفافية. قبول هدايا من موردين يمثل تعارض مصالح حتى لو لم تؤثر فعلياً على القرار. يجب الرفض والإفصاح وفق سياسة الشركة لحماية النزاهة المهنية والمؤسسية.', tag:'tag-people' },
+];
+
+const DOMAIN_COLORS = { People: '#00C9A7', Process: '#C9A84C', 'Business Environment': '#FF4757', Agile: '#2ED573' };
+
+// ═══════════════════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════════════════
+let userData = {};
+let checkedItems = new Set();
+let currentQ = 0;
+let answers = new Array(25).fill(null);
+let flags = new Set();
+let revealed = new Array(25).fill(false);
+let timerInterval = null;
+let timeLeft = 50 * 60;
+let examStarted = false;
+let examLang = 'ar';
+let startLang = 'ar';
+let calcExpr = '';
+let wbCtx, wbDrawing = false, wbColor = '#1a1a2e', wbSize = 3;
+let examScores = [];
+let examCount = 0;
+let totalQDone = 0;
+
+// ═══════════════════════════════════════════════════════
+//  REGISTRATION
+// ═══════════════════════════════════════════════════════
+function register() {
+  const name = document.getElementById('r-name').value.trim();
+  const email = document.getElementById('r-email').value.trim();
+  const city = document.getElementById('r-city').value.trim();
+  if (!name || !email || !city) { alert('يرجى تعبئة الحقول الإلزامية: الاسم، البريد، الدولة'); return; }
+  userData = {
+    name, email, city,
+    phone: document.getElementById('r-phone').value,
+    field: document.getElementById('r-field').value,
+    exp: document.getElementById('r-exp').value,
+    prev: document.getElementById('r-prev').value,
+    date: document.getElementById('r-date').value,
+    pmi: document.getElementById('r-pmi').value,
+    level: document.getElementById('r-level').value,
+    challenges: document.getElementById('r-challenges').value,
+  };
+  document.getElementById('screen-register').style.display = 'none';
+  document.getElementById('main-nav').style.display = 'block';
+  buildDashboard();
+  showTab('dashboard');
+}
+
+// ═══════════════════════════════════════════════════════
+//  NAVIGATION
+// ═══════════════════════════════════════════════════════
+function showTab(tab) {
+  document.querySelectorAll('.screen').forEach(s => { s.style.display = 'none'; s.classList.remove('active'); });
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  const tabs = ['dashboard','exam','profile'];
+  const idx = tabs.indexOf(tab);
+  if (idx >= 0) document.querySelectorAll('.nav-tab')[idx].classList.add('active');
+  const el = document.getElementById('screen-' + tab);
+  el.style.display = 'flex';
+  el.classList.add('active');
+  if (tab === 'profile') fillProfile();
+  if (tab === 'exam' && !examStarted) {
+    document.getElementById('exam-start-view').style.display = 'flex';
+    document.getElementById('exam-active-view').style.display = 'none';
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+//  DASHBOARD
+// ═══════════════════════════════════════════════════════
+function buildDashboard() {
+  const n = userData.name;
+  document.getElementById('nav-name').textContent = n.split(' ')[0];
+  document.getElementById('dash-name').textContent = n;
+  document.getElementById('dash-avatar').textContent = n[0];
+  if (userData.date) {
+    const d = Math.ceil((new Date(userData.date) - new Date()) / 86400000);
+    document.getElementById('stat-days').textContent = d > 0 ? d : '—';
+    document.getElementById('dash-meta').textContent = d > 0 ? `${d} يوم متبقي على الاختبار — استمر في المراجعة!` : 'حدد تاريخ اختبارك في ملفك الشخصي';
+  }
+  buildChecklist();
+  updateStats();
+}
+
+function buildChecklist() {
+  const body = document.getElementById('checklist-body');
+  body.innerHTML = '';
+  CHECKLIST_ITEMS.forEach(item => {
+    const done = checkedItems.has(item.id);
+    body.innerHTML += `
+      <div class="checklist-item">
+        <div class="chk-box ${done ? 'done' : ''}" onclick="toggleCheck(${item.id}, this)"></div>
+        <div class="chk-info">
+          <div class="chk-title">${item.title}</div>
+          <div class="chk-meta">${item.meta} · ${item.questions} سؤال مطلوب</div>
+          <span class="chk-tag ${item.tag}">${item.label}</span>
+        </div>
+      </div>`;
+  });
+}
+
+function toggleCheck(id, el) {
+  if (checkedItems.has(id)) { checkedItems.delete(id); el.classList.remove('done'); }
+  else { checkedItems.add(id); el.classList.add('done'); }
+  updateStats();
+}
+
+function updateStats() {
+  const done = checkedItems.size;
+  const total = CHECKLIST_ITEMS.length;
+  const pct = Math.round(done / total * 100);
+  document.getElementById('stat-progress').textContent = pct + '%';
+  document.getElementById('stat-done').textContent = done + '/' + total;
+  document.getElementById('checklist-counter').textContent = done + ' / ' + total + ' مكتمل';
+  if (examScores.length) {
+    const avg = Math.round(examScores.reduce((a,b)=>a+b,0)/examScores.length);
+    document.getElementById('stat-avg').textContent = avg + '%';
+  }
+  // Domain progress from checklist
+  const domains = { people: [1,2,3], process: [4,5,6,7], biz: [8,9], agile: [10,11,12] };
+  for (const [k, ids] of Object.entries(domains)) {
+    const d = ids.filter(i => checkedItems.has(i)).length;
+    const p = Math.round(d / ids.length * 100);
+    document.getElementById('prog-' + k).textContent = p + '%';
+    document.getElementById('fill-' + k).style.width = p + '%';
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+//  EXAM
+// ═══════════════════════════════════════════════════════
+function selectStartLang(lang, btn) {
+  startLang = lang;
+  document.querySelectorAll('#start-lang-btns .lang-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function startExam() {
+  examLang = startLang;
+  examStarted = true;
+  currentQ = 0;
+  answers = new Array(25).fill(null);
+  flags = new Set();
+  revealed = new Array(25).fill(false);
+  timeLeft = 50 * 60;
+  document.getElementById('exam-start-view').style.display = 'none';
+  document.getElementById('exam-active-view').style.display = 'grid';
+  buildQGrid();
+  renderQ();
+  startTimer();
+  setLang(examLang);
+}
+
+function startTimer() {
+  clearInterval(timerInterval);
+  timerInterval = setInterval(() => {
+    timeLeft--;
+    const m = String(Math.floor(timeLeft / 60)).padStart(2,'0');
+    const s = String(timeLeft % 60).padStart(2,'0');
+    const el = document.getElementById('timer-display');
+    el.textContent = m + ':' + s;
+    el.className = 'timer-val' + (timeLeft < 300 ? ' danger' : timeLeft < 600 ? ' warning' : '');
+    if (timeLeft <= 0) { clearInterval(timerInterval); finishExam(); }
+  }, 1000);
+}
+
+function buildQGrid() {
+  const grid = document.getElementById('q-grid');
+  grid.innerHTML = '';
+  for (let i = 0; i < 25; i++) {
+    const cls = i === currentQ ? 'current' : answers[i] !== null ? (revealed[i] ? (answers[i] === QUESTIONS[i].correct ? 'correct' : 'wrong') : 'answered') : flags.has(i) ? 'flagged' : '';
+    grid.innerHTML += `<div class="q-dot ${cls}" onclick="goToQ(${i})">${i+1}</div>`;
+  }
+}
+
+function renderQ() {
+  const q = QUESTIONS[currentQ];
+  document.getElementById('q-num-label').textContent = `السؤال ${currentQ+1} من 25`;
+  const tag = document.getElementById('q-domain-tag');
+  const tagMap = { People:'tag-people', Process:'tag-process', 'Business Environment':'tag-biz' };
+  tag.className = 'q-tag ' + (tagMap[q.domain] || 'tag-agile');
+  tag.textContent = q.domain;
+  document.getElementById('q-text-ar').textContent = q.ar;
+  const enEl = document.getElementById('q-text-en');
+  if (examLang === 'en') { document.getElementById('q-text-ar').style.display='none'; enEl.style.display='block'; enEl.textContent = q.en; }
+  else if (examLang === 'both') { document.getElementById('q-text-ar').style.display='block'; enEl.style.display='block'; enEl.textContent = q.en; }
+  else { document.getElementById('q-text-ar').style.display='block'; enEl.style.display='none'; }
+  const flagBtn = document.getElementById('flag-btn');
+  flagBtn.className = 'flag-btn' + (flags.has(currentQ) ? ' flagged' : '');
+  const wrap = document.getElementById('choices-wrap');
+  wrap.innerHTML = '';
+  const letters = ['أ','ب','ج','د'];
+  const choicesList = examLang === 'en' ? q.choices_en : examLang === 'both' ? q.choices_ar : q.choices_ar;
+  const choicesEn = q.choices_en;
+  for (let i = 0; i < 4; i++) {
+    let cls = 'choice';
+    if (revealed[currentQ]) {
+      cls += ' disabled';
+      if (i === q.correct) cls += ' correct';
+      else if (i === answers[currentQ] && answers[currentQ] !== q.correct) cls += ' wrong';
+    } else if (answers[currentQ] === i) cls += ' selected';
+    const txt = examLang === 'both' ? `${choicesList[i]} — ${choicesEn[i]}` : (examLang === 'en' ? choicesEn[i] : choicesList[i]);
+    wrap.innerHTML += `<div class="${cls}" onclick="selectAnswer(${i})"><div class="choice-letter">${letters[i]}</div><div class="choice-text">${txt}</div></div>`;
+  }
+  const expEl = document.getElementById('explanation');
+  const expText = document.getElementById('exp-text');
+  if (revealed[currentQ]) { expEl.classList.add('show'); expText.textContent = q.exp; }
+  else { expEl.classList.remove('show'); }
+  buildQGrid();
+  updateSidebarStats();
+  document.getElementById('next-btn').textContent = currentQ === 24 ? 'إنهاء الاختبار' : 'التالي ⟶';
+}
+
+function selectAnswer(idx) {
+  if (revealed[currentQ]) return;
+  answers[currentQ] = idx;
+  revealed[currentQ] = true;
+  totalQDone++;
+  renderQ();
+}
+
+function toggleFlag() {
+  if (flags.has(currentQ)) flags.delete(currentQ);
+  else flags.add(currentQ);
+  renderQ();
+}
+
+function prevQ() { if (currentQ > 0) { currentQ--; renderQ(); } }
+function nextQ() {
+  if (currentQ < 24) { currentQ++; renderQ(); }
+  else confirmFinish();
+}
+function goToQ(i) { currentQ = i; renderQ(); }
+
+function setLang(lang) {
+  examLang = lang;
+  ['ar','en','both'].forEach(l => document.getElementById('lb-'+l).classList.toggle('active', l === lang));
+  if (examStarted) renderQ();
+}
+
+function updateSidebarStats() {
+  const ans = answers.filter(a => a !== null).length;
+  document.getElementById('answered-count').textContent = ans;
+  document.getElementById('flagged-count').textContent = flags.size;
+  document.getElementById('unanswered-count').textContent = 25 - ans;
+}
+
+function confirmFinish() {
+  const unanswered = answers.filter(a => a === null).length;
+  if (unanswered > 0) document.getElementById('finish-modal').classList.add('show');
+  else finishExam();
+}
+
+function finishExam() {
+  closeModal('finish-modal');
+  clearInterval(timerInterval);
+  const timeUsed = Math.round((50*60 - timeLeft) / 60);
+  const correct = answers.filter((a,i) => a === QUESTIONS[i].correct).length;
+  const wrong = 25 - correct;
+  const score = Math.round(correct / 25 * 100);
+  examScores.push(score);
+  examCount++;
+  buildReport(correct, wrong, score, timeUsed);
+  showTab('report');
+  examStarted = false;
+  document.getElementById('exam-start-view').style.display = 'flex';
+  document.getElementById('exam-active-view').style.display = 'none';
+}
+
+// ═══════════════════════════════════════════════════════
+//  REPORT
+// ═══════════════════════════════════════════════════════
+function buildReport(correct, wrong, score, timeUsed) {
+  document.getElementById('rep-score').textContent = score + '%';
+  document.getElementById('rep-correct').textContent = correct;
+  document.getElementById('rep-wrong').textContent = wrong;
+  document.getElementById('rep-time').textContent = timeUsed;
+  const grade = score >= 80 ? '🏆 ممتاز — أنت جاهز للاختبار!' : score >= 65 ? '✅ جيد جداً — استمر في المراجعة' : score >= 50 ? '⚠️ متوسط — ركز على نقاط ضعفك' : '❌ تحتاج مراجعة مكثفة';
+  document.getElementById('rep-grade').textContent = grade;
+  const circumference = 2 * Math.PI * 60;
+  const offset = circumference * (1 - score/100);
+  document.getElementById('score-circle').style.strokeDashoffset = offset;
+  document.getElementById('score-circle').style.stroke = score >= 80 ? '#2ED573' : score >= 65 ? '#C9A84C' : '#FF4757';
+
+  // Domain analysis
+  const domains = {};
+  QUESTIONS.forEach((q,i) => {
+    if (!domains[q.domain]) domains[q.domain] = {correct:0, total:0};
+    domains[q.domain].total++;
+    if (answers[i] === q.correct) domains[q.domain].correct++;
+  });
+  const bars = document.getElementById('domain-bars');
+  bars.innerHTML = '';
+  const clrs = {'People':'#00C9A7','Process':'#C9A84C','Business Environment':'#FF4757'};
+  for (const [d, stats] of Object.entries(domains)) {
+    const pct = Math.round(stats.correct/stats.total*100);
+    bars.innerHTML += `<div class="domain-bar-item">
+      <div class="domain-name">${d}</div>
+      <div class="domain-prog"><div class="domain-fill" style="width:${pct}%; background:${clrs[d]||'#6c5ce7'}"></div></div>
+      <div class="domain-pct">${pct}%</div>
+    </div>`;
+  }
+
+  // Strengths & weaknesses
+  const strongDomains = [], weakDomains = [];
+  for (const [d, stats] of Object.entries(domains)) {
+    const pct = Math.round(stats.correct/stats.total*100);
+    if (pct >= 70) strongDomains.push({ d, pct });
+    else weakDomains.push({ d, pct });
+  }
+  const sl = document.getElementById('strengths-list');
+  sl.innerHTML = strongDomains.length ? strongDomains.map(s=>`<div class="strength-item"><div class="dot-g"></div>${s.d} — ${s.pct}%</div>`).join('') : '<div class="strength-item"><div class="dot-g"></div>أجرِ المزيد من الاختبارات لتحديد نقاط قوتك</div>';
+  const wl = document.getElementById('weaknesses-list');
+  wl.innerHTML = weakDomains.length ? weakDomains.map(w=>`<div class="weakness-item"><div class="dot-r"></div>${w.d} — ${w.pct}%</div>`).join('') : '<div class="weakness-item" style="color:var(--green)">🎯 لا توجد نقاط ضعف واضحة — أداء ممتاز!</div>';
+
+  // Recommendations
+  const recs = [];
+  if (domains['People'] && domains['People'].correct/domains['People'].total < 0.7) {
+    recs.push('ركز على Leadership Styles وStakeholder Engagement وConflict Resolution');
+    recs.push('راجع PMI Mindset في التعامل مع أعضاء الفريق والتحفيز');
+  }
+  if (domains['Process'] && domains['Process'].correct/domains['Process'].total < 0.7) {
+    recs.push('راجع Earned Value Management: CPI وSPI وEAC وETC');
+    recs.push('ادرس Change Control Process وRisk Response Strategies بشكل مكثف');
+  }
+  if (domains['Business Environment'] && domains['Business Environment'].correct/domains['Business Environment'].total < 0.7) {
+    recs.push('راجع Benefits Realization وCompliance وGovernance');
+    recs.push('افهم متى تستخدم كل نهج: Predictive vs Agile vs Hybrid');
+  }
+  if (!recs.length) recs.push('استمر في حل أسئلة المحاكاة وحافظ على هذا المستوى الممتاز');
+  const rl = document.getElementById('recommendations-list');
+  rl.innerHTML = recs.map((r,i)=>`<div class="reco-item"><span style="color:var(--gold); font-weight:700; flex-shrink:0;">${i+1}.</span>${r}</div>`).join('');
+
+  // Similar questions for wrong answers
+  const wrongQs = QUESTIONS.filter((_,i) => answers[i] !== null && answers[i] !== QUESTIONS[i].correct);
+  const simEl = document.getElementById('similar-questions-list');
+  if (!wrongQs.length) {
+    simEl.innerHTML = '<div class="similar-q-item" style="color:var(--green);">🏆 أجبت على جميع الأسئلة بشكل صحيح! جرب الاختبار مرة أخرى للتأكد من ثبات المستوى.</div>';
+    return;
+  }
+  const simQs = [
+    { domain:'People', q:'أنت تلاحظ أن عضوين في الفريق يتجادلان باستمرار مما يؤثر على الإنتاجية. ماذا تفعل أولاً؟', hint:'Conflict Management — تذكر الأنواع الخمسة لحل النزاع' },
+    { domain:'Process', q:'اكتشفت في منتصف المشروع أن المتطلبات لم تُوثَّق بشكل كافٍ. ما الخطوة الصحيحة؟', hint:'Scope Management — راجع Scope Baseline وعملية Collect Requirements' },
+    { domain:'Business Environment', q:'مشروعك على وشك تجاوز الميزانية بنسبة 10%. ما الأولوية؟', hint:'Cost Management — راجع Forecasting وETC' },
+    { domain:'People', q:'فريقك يعمل عن بُعد من دول مختلفة وتواجه صعوبات في التنسيق. ما الحل؟', hint:'Virtual Teams — راجع Communication Management وTools' },
+    { domain:'Process', q:'تلقيت في نهاية الـ Sprint Velocity أقل من المتوقع. كيف تتعامل مع ذلك في Sprint Retrospective؟', hint:'Agile Metrics — راجع Velocity وBurndown Chart' },
+  ];
+  const relevantSim = simQs.filter(s => wrongQs.some(w => w.domain === s.domain));
+  const toShow = relevantSim.length ? relevantSim : simQs.slice(0,3);
+  simEl.innerHTML = toShow.map(s=>`<div class="similar-q-item"><strong style="color:var(--text);">${s.q}</strong><br><span style="color:var(--gold); font-size:12px; margin-top:6px; display:block;">💡 ${s.hint}</span></div>`).join('');
+  updateStats();
+}
+
+// ═══════════════════════════════════════════════════════
+//  PROFILE
+// ═══════════════════════════════════════════════════════
+function fillProfile() {
+  if (!userData.name) return;
+  const n = userData.name;
+  document.getElementById('prof-avatar').textContent = n[0];
+  document.getElementById('prof-name').textContent = n;
+  document.getElementById('pi-name').textContent = n;
+  document.getElementById('pi-email').textContent = userData.email || '—';
+  document.getElementById('pi-phone').textContent = userData.phone || '—';
+  document.getElementById('pi-city').textContent = userData.city || '—';
+  document.getElementById('pi-field').textContent = userData.field || '—';
+  document.getElementById('pi-exp').textContent = userData.exp || '—';
+  document.getElementById('pi-level').textContent = userData.level || '—';
+  document.getElementById('pi-date').textContent = userData.date || '—';
+  document.getElementById('pi-pmi').textContent = userData.pmi || '—';
+  document.getElementById('pi-challenges').textContent = userData.challenges || '—';
+  if (examScores.length) {
+    document.getElementById('pi-last-score').textContent = examScores[examScores.length-1] + '%';
+  }
+  document.getElementById('pi-exam-count').textContent = examCount;
+  document.getElementById('pi-q-done').textContent = totalQDone;
+}
+
+// ═══════════════════════════════════════════════════════
+//  CALCULATOR
+// ═══════════════════════════════════════════════════════
+function openCalc() { document.getElementById('calc-modal').classList.add('show'); }
+function openWB() { document.getElementById('wb-modal').classList.add('show'); initWB(); }
+function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+
+function calcAction(val) {
+  const disp = document.getElementById('calcDisplay');
+  if (val === 'C') { calcExpr = ''; disp.textContent = '0'; return; }
+  if (val === '=') {
+    try {
+      const result = Function('"use strict"; return (' + calcExpr + ')')();
+      disp.textContent = parseFloat(result.toFixed(10)).toString();
+      calcExpr = disp.textContent;
+    } catch { disp.textContent = 'خطأ'; calcExpr = ''; }
+    return;
+  }
+  if (val === '±') { calcExpr = calcExpr ? String(-parseFloat(calcExpr)) : '0'; disp.textContent = calcExpr; return; }
+  if (val === '%') { calcExpr = calcExpr ? String(parseFloat(calcExpr)/100) : '0'; disp.textContent = calcExpr; return; }
+  calcExpr += val;
+  disp.textContent = calcExpr;
+}
+
+// ═══════════════════════════════════════════════════════
+//  WHITEBOARD
+// ═══════════════════════════════════════════════════════
+function initWB() {
+  const canvas = document.getElementById('wb-canvas');
+  if (wbCtx) return;
+  wbCtx = canvas.getContext('2d');
+  canvas.addEventListener('mousedown', e => { wbDrawing=true; wbCtx.beginPath(); wbCtx.moveTo(e.offsetX, e.offsetY); });
+  canvas.addEventListener('mousemove', e => { if(!wbDrawing) return; wbCtx.lineTo(e.offsetX, e.offsetY); wbCtx.strokeStyle=wbColor; wbCtx.lineWidth=wbSize; wbCtx.lineCap='round'; wbCtx.stroke(); });
+  canvas.addEventListener('mouseup', () => wbDrawing=false);
+  canvas.addEventListener('mouseleave', () => wbDrawing=false);
+  canvas.addEventListener('touchstart', e => { e.preventDefault(); const t=e.touches[0]; const r=canvas.getBoundingClientRect(); wbDrawing=true; wbCtx.beginPath(); wbCtx.moveTo(t.clientX-r.left, t.clientY-r.top); }, {passive:false});
+  canvas.addEventListener('touchmove', e => { e.preventDefault(); if(!wbDrawing) return; const t=e.touches[0]; const r=canvas.getBoundingClientRect(); wbCtx.lineTo(t.clientX-r.left, t.clientY-r.top); wbCtx.strokeStyle=wbColor; wbCtx.lineWidth=wbSize; wbCtx.lineCap='round'; wbCtx.stroke(); }, {passive:false});
+  canvas.addEventListener('touchend', () => wbDrawing=false);
+  document.getElementById('wb-size').addEventListener('input', e => wbSize=parseInt(e.target.value));
+}
+function setWBColor(el) {
+  wbColor = el.dataset.clr;
+  document.querySelectorAll('.wb-clr').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+}
+function clearWB() { if(wbCtx) wbCtx.clearRect(0,0,580,300); }
+</script>
+</body>
+</html>
